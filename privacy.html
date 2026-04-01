@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#FF6B35" />
+  <title>개인정보처리방침 — 뇌팔청춘365</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --primary:      #FF6B35;
+      --primary-light:#fff3ee;
+      --text:         #1a1a2e;
+      --text-sub:     #5a6070;
+      --text-muted:   #9199a8;
+      --bg:           #faf9f7;
+      --surface:      #ffffff;
+      --border:       #e8e4de;
+      --green:        #2EAA6B;
+      --green-light:  #edfaf4;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Noto Sans KR', 'Malgun Gothic', sans-serif;
+      background: var(--bg); color: var(--text);
+      font-size: 16px; line-height: 1.8;
+    }
+
+    /* 헤더 */
+    .header {
+      background: linear-gradient(135deg, #FF6B35, #F4A227);
+      padding: 40px 20px 32px;
+      text-align: center;
+      color: #fff;
+    }
+    .header-icon {
+      width: 72px; height: 72px;
+      background: rgba(255,255,255,.2);
+      border-radius: 18px;
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 36px; margin-bottom: 16px;
+    }
+    .header h1 { font-size: 22px; font-weight: 900; margin-bottom: 6px; }
+    .header p  { font-size: 14px; opacity: .85; }
+
+    /* 안심 배지 */
+    .safe-banner {
+      background: var(--green-light);
+      border-bottom: 2px solid #b7e8d0;
+      padding: 16px 20px;
+      display: flex; align-items: center; gap: 12px;
+    }
+    .safe-banner .icon { font-size: 28px; flex-shrink: 0; }
+    .safe-banner .txt  { font-size: 15px; font-weight: 700; color: var(--green); }
+    .safe-banner .sub  { font-size: 13px; color: var(--text-sub); margin-top: 2px; }
+
+    /* 본문 */
+    .wrap { max-width: 720px; margin: 0 auto; padding: 32px 20px 80px; }
+
+    /* 섹션 */
+    .section {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+    .section-title {
+      font-size: 17px; font-weight: 900;
+      color: var(--text); margin-bottom: 14px;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .section-title .num {
+      width: 28px; height: 28px;
+      background: var(--primary); color: #fff;
+      border-radius: 50%; font-size: 14px; font-weight: 900;
+      display: inline-flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    p { color: var(--text-sub); font-size: 15px; margin-bottom: 10px; }
+    p:last-child { margin-bottom: 0; }
+
+    /* 강조 박스 */
+    .highlight {
+      background: var(--primary-light);
+      border-left: 4px solid var(--primary);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin: 12px 0;
+      font-size: 15px; color: var(--text); font-weight: 700;
+    }
+    .highlight-green {
+      background: var(--green-light);
+      border-left: 4px solid var(--green);
+      border-radius: 10px;
+      padding: 14px 16px;
+      margin: 12px 0;
+      font-size: 15px; color: var(--text);
+    }
+
+    /* 테이블 */
+    .tbl { width: 100%; border-collapse: collapse; margin: 12px 0; font-size: 14px; }
+    .tbl th {
+      background: var(--primary); color: #fff;
+      padding: 10px 12px; text-align: left; font-weight: 700;
+    }
+    .tbl th:first-child { border-radius: 10px 0 0 0; }
+    .tbl th:last-child  { border-radius: 0 10px 0 0; }
+    .tbl td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: var(--text-sub); }
+    .tbl tr:last-child td { border-bottom: none; }
+    .tbl tr:nth-child(even) td { background: var(--bg); }
+
+    /* 마이크 권한 박스 */
+    .mic-box {
+      background: #fff8f0;
+      border: 1.5px solid #ffd4c2;
+      border-radius: 14px;
+      padding: 18px;
+      margin: 12px 0;
+    }
+    .mic-box .mic-title { font-size: 16px; font-weight: 900; color: var(--primary); margin-bottom: 8px; }
+    .mic-box ul { padding-left: 18px; }
+    .mic-box li { color: var(--text-sub); font-size: 14px; margin-bottom: 4px; }
+
+    /* 언어 전환 */
+    .lang-switch {
+      text-align: center; padding: 16px;
+      font-size: 14px; color: var(--text-muted);
+    }
+    .lang-switch a {
+      color: var(--primary); font-weight: 700;
+      text-decoration: none; margin: 0 8px;
+    }
+
+    /* 푸터 */
+    .footer {
+      background: var(--surface);
+      border-top: 1px solid var(--border);
+      padding: 24px 20px;
+      text-align: center;
+      font-size: 13px; color: var(--text-muted);
+    }
+    .footer strong { color: var(--primary); }
+
+    /* 영문 섹션 */
+    .en { display: none; }
+    .en p, .en li { font-family: 'Noto Sans KR', sans-serif; }
+
+    /* 버튼 */
+    .back-btn {
+      display: inline-flex; align-items: center; gap: 6px;
+      background: var(--primary); color: #fff;
+      border: none; border-radius: 12px;
+      padding: 12px 20px; font-size: 15px; font-weight: 700;
+      cursor: pointer; text-decoration: none; margin-bottom: 24px;
+    }
+  </style>
+</head>
+<body>
+
+<!-- 헤더 -->
+<div class="header">
+  <div class="header-icon">😄</div>
+  <h1>개인정보처리방침</h1>
+  <p>Privacy Policy · 뇌팔청춘365</p>
+</div>
+
+<!-- 안심 배지 -->
+<div class="safe-banner">
+  <div class="icon">🔒</div>
+  <div>
+    <div class="txt">이 앱은 개인정보를 수집하거나 외부로 전송하지 않습니다</div>
+    <div class="sub">모든 데이터는 오직 사용자의 기기 안에만 저장됩니다</div>
+  </div>
+</div>
+
+<!-- 언어 전환 -->
+<div class="lang-switch">
+  <a href="#korean">한국어</a> |
+  <a href="#english">English</a>
+</div>
+
+<!-- ═══════════════ 한국어 ═══════════════ -->
+<div class="wrap" id="korean">
+
+  <div class="section">
+    <div class="section-title"><span class="num">1</span> 기본 원칙</div>
+    <div class="highlight-green">
+      ✅ 뇌팔청춘365는 사용자의 개인정보를 <strong>수집, 저장, 공유, 판매하지 않습니다.</strong>
+    </div>
+    <p>
+      본 앱은 회원가입이 없으며, 서버로 전송되는 데이터가 없습니다.
+      앱 내 모든 활동 기록(점수, 미션, 구매 여부 등)은 오직 사용자의 기기 내부 저장소에만 보관됩니다.
+    </p>
+    <p>시행일: 2025년 1월 1일 &nbsp;|&nbsp; 최종 수정일: 2025년 6월 1일</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="num">2</span> 수집하는 정보</div>
+    <table class="tbl">
+      <tr>
+        <th>구분</th><th>내용</th><th>저장 위치</th><th>외부 전송</th>
+      </tr>
+      <tr>
+        <td>운동 점수 기록</td>
+        <td>발성 훈련 점수, 날짜</td>
+        <td>기기 내부</td>
+        <td>❌ 없음</td>
+      </tr>
+      <tr>
+        <td>미션 진행 현황</td>
+        <td>오늘의 미션 완료 여부</td>
+        <td>기기 내부</td>
+        <td>❌ 없음</td>
+      </tr>
+      <tr>
+        <td>연속 도전 기록</td>
+        <td>연속 사용 일수(스트릭)</td>
+        <td>기기 내부</td>
+        <td>❌ 없음</td>
+      </tr>
+      <tr>
+        <td>구매 여부</td>
+        <td>정식판 구매 확인값</td>
+        <td>기기 내부</td>
+        <td>❌ 없음</td>
+      </tr>
+    </table>
+    <p style="font-size:13px; color:var(--text-muted);">
+      * 위 데이터는 localStorage(기기 내부 저장소)에만 저장되며, 앱 삭제 시 함께 삭제됩니다.
+    </p>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="num">3</span> 마이크 권한 사용</div>
+    <div class="mic-box">
+      <div class="mic-title">🎙️ 마이크 접근 목적</div>
+      <ul>
+        <li>발성 훈련 시 <strong>음성 볼륨(데시벨) 측정</strong>에만 사용됩니다</li>
+        <li>음성 내용은 <strong>절대 녹음, 저장, 전송되지 않습니다</strong></li>
+        <li>오직 소리의 크기(loudness)만 실시간으로 측정 후 즉시 폐기됩니다</li>
+        <li>마이크 권한을 거부해도 다른 기능은 정상 이용 가능합니다</li>
+      </ul>
+    </div>
+    <p>마이크 권한은 웹 표준 기술인 <strong>Web Audio API</strong>를 사용하며, 수집된 음성 데이터는 외부 서버로 전송되지 않습니다.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="num">4</span> 제3자 서비스</div>
+    <table class="tbl">
+      <tr>
+        <th>서비스</th><th>용도</th><th>수집 데이터</th>
+      </tr>
+      <tr>
+        <td>Google Fonts</td>
+        <td>폰트(Noto Sans KR) 로딩</td>
+        <td>IP 주소 (구글 정책에 따름)</td>
+      </tr>
+      <tr>
+        <td>Google Play Billing</td>
+        <td>인앱 결제 처리</td>
+        <td>구글 계정 결제 정보 (구글 정책에 따름)</td>
+      </tr>
+    </table>
+    <p>
+      Google Play 결제 관련 개인정보는 Google의 개인정보처리방침을 따르며,
+      앱 개발사는 결제 정보에 접근할 수 없습니다.
+    </p>
+    <p>
+      Google 개인정보처리방침:
+      <a href="https://policies.google.com/privacy" target="_blank" style="color:var(--primary);">
+        https://policies.google.com/privacy
+      </a>
+    </p>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="num">5</span> 아동 개인정보 보호</div>
+    <p>
+      본 앱은 <strong>만 13세 미만 아동을 대상으로 하지 않습니다.</strong>
+      만 13세 미만 사용자의 개인정보는 의도적으로 수집하지 않습니다.
+      어르신(시니어) 및 성인 사용자를 주 대상으로 합니다.
+    </p>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="num">6</span> 데이터 삭제 방법</div>
+    <div class="highlight">
+      📱 앱 내 [내 기록] 탭 → [기록 전체 삭제] 버튼으로 즉시 삭제 가능합니다.
+    </div>
+    <p>앱을 기기에서 삭제하면 저장된 모든 데이터가 완전히 제거됩니다.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="num">7</span> 방침 변경 안내</div>
+    <p>
+      개인정보처리방침이 변경될 경우 이 페이지를 통해 공지합니다.
+      변경 사항은 이 페이지에 게시된 날부터 효력이 발생합니다.
+    </p>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="num">8</span> 문의</div>
+    <p>개인정보 관련 문의사항은 아래로 연락해 주세요.</p>
+    <div class="highlight-green">
+      📧 이메일: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="294e46454d5a5c47106941485b5c5e46464407425b">[email&#160;protected]</a><br>
+      🌐 웹사이트: https://smile365.pages.dev<br>
+      📱 앱명: 뇌팔청춘365
+    </div>
+  </div>
+
+</div><!-- /korean -->
+
+
+<!-- ═══════════════ ENGLISH ═══════════════ -->
+<div class="wrap" id="english">
+
+  <div class="section">
+    <div class="section-title"><span class="num">1</span> Overview</div>
+    <div class="highlight-green">
+      ✅ Laugh 365 does <strong>NOT collect, store, share, or sell</strong> any personal information.
+    </div>
+    <p>
+      This app requires no account registration and transmits no data to any server.
+      All in-app activity data (scores, missions, purchase status, etc.) is stored exclusively
+      on the user's local device.
+    </p>
+    <p>Effective Date: January 1, 2025 &nbsp;|&nbsp; Last Updated: June 1, 2025</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="num">2</span> Information We Collect</div>
+    <table class="tbl">
+      <tr>
+        <th>Type</th><th>Content</th><th>Storage</th><th>Transmitted</th>
+      </tr>
+      <tr>
+        <td>Exercise scores</td>
+        <td>Voice training scores and dates</td>
+        <td>Device only</td>
+        <td>❌ Never</td>
+      </tr>
+      <tr>
+        <td>Mission progress</td>
+        <td>Daily mission completion status</td>
+        <td>Device only</td>
+        <td>❌ Never</td>
+      </tr>
+      <tr>
+        <td>Streak record</td>
+        <td>Consecutive usage days</td>
+        <td>Device only</td>
+        <td>❌ Never</td>
+      </tr>
+      <tr>
+        <td>Purchase status</td>
+        <td>Premium purchase confirmation</td>
+        <td>Device only</td>
+        <td>❌ Never</td>
+      </tr>
+    </table>
+    <p style="font-size:13px; color:var(--text-muted);">
+      * All data is stored in localStorage (device internal storage) and is deleted when the app is uninstalled.
+    </p>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="num">3</span> Microphone Permission</div>
+    <div class="mic-box">
+      <div class="mic-title">🎙️ Why We Need Microphone Access</div>
+      <ul>
+        <li>Used <strong>only to measure voice volume (decibel level)</strong> during vocal exercises</li>
+        <li>Voice content is <strong>never recorded, stored, or transmitted</strong></li>
+        <li>Only real-time loudness is measured and immediately discarded</li>
+        <li>All other features remain fully functional without microphone permission</li>
+      </ul>
+    </div>
+    <p>
+      Microphone access uses the standard <strong>Web Audio API</strong>.
+      No audio data is sent to any external server.
+    </p>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="num">4</span> Third-Party Services</div>
+    <table class="tbl">
+      <tr>
+        <th>Service</th><th>Purpose</th><th>Data Collected</th>
+      </tr>
+      <tr>
+        <td>Google Fonts</td>
+        <td>Loading Noto Sans KR font</td>
+        <td>IP address (per Google's policy)</td>
+      </tr>
+      <tr>
+        <td>Google Play Billing</td>
+        <td>In-app purchase processing</td>
+        <td>Google account payment info (per Google's policy)</td>
+      </tr>
+    </table>
+    <p>
+      Payment information via Google Play is governed by Google's Privacy Policy.
+      The app developer has no access to payment details.<br>
+      Google Privacy Policy:
+      <a href="https://policies.google.com/privacy" target="_blank" style="color:var(--primary);">
+        https://policies.google.com/privacy
+      </a>
+    </p>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="num">5</span> Children's Privacy</div>
+    <p>
+      This app is <strong>not directed at children under 13 years of age.</strong>
+      We do not knowingly collect personal information from children under 13.
+      This app is designed primarily for senior adults.
+    </p>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="num">6</span> How to Delete Your Data</div>
+    <div class="highlight">
+      📱 In the app: [My Records] tab → [Delete All Records] button.
+    </div>
+    <p>Uninstalling the app will completely remove all stored data from your device.</p>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="num">7</span> Changes to This Policy</div>
+    <p>
+      Any changes to this Privacy Policy will be posted on this page.
+      Changes take effect from the date they are posted here.
+    </p>
+  </div>
+
+  <div class="section">
+    <div class="section-title"><span class="num">8</span> Contact Us</div>
+    <p>For any privacy-related questions, please contact us:</p>
+    <div class="highlight-green">
+      📧 Email: <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="4b2c24272f383e25720b232a393e3c242426652039">[email&#160;protected]</a><br>
+      🌐 Website: https://smile365.pages.dev<br>
+      📱 App Name: La
