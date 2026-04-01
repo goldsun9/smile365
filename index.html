@@ -1434,22 +1434,8 @@
   </div>
 </div>
 
-<!-- ────────── 구매 유도 모달 (체험 소진 시) ────────── -->
-<div class="modal" id="limitModal" onclick="closeModal('limitModal',event)">
-  <div class="modal-sheet">
-    <div class="modal-handle"></div>
-    <div class="modal-title">오늘 체험 횟수를 모두 사용했어요</div>
-    <div class="modal-sub">정식 구매 시 하루 횟수 제한 없이,<br>4가지 모드를 마음껏 즐길 수 있어요.</div>
-    <div style="background:var(--primary-light);border-radius:var(--r-md);padding:18px;text-align:center;margin-bottom:16px;">
-      <div style="font-size:14px;color:var(--primary);font-weight:700;margin-bottom:6px;">정식판 — 한 번 결제 · 평생 이용</div>
-      <div style="font-size:40px;font-weight:900;color:var(--text);">9,900<span style="font-size:20px;font-weight:400;">원</span></div>
-    </div>
-    <button class="btn btn-primary" onclick="closeModal('limitModal'); switchTab('buy', document.querySelectorAll('.tab')[3]);">
-      🛒 지금 구매하러 가기
-    </button>
-    <div class="note center" style="margin-top:10px;">내일이면 체험 횟수가 다시 3회로 초기화됩니다</div>
-  </div>
-</div>
+<!-- 구매 유도 모달 제거됨 -->
+<div class="modal" id="limitModal" style="display:none!important;"></div>
 
 <script>
   /* ─── MP3 인라인 데이터 ─── */
@@ -1461,9 +1447,9 @@
   const DK  = 'hw_daily';
   const STK = 'hw_streak';
   const MK  = 'hw_mission_v1';   // 오늘의 미션 진행 저장
-  const FREE_DAILY = 3;
-  const FREE_SEC   = 30;
-  const PAID_SEC   = 60;
+  const FREE_DAILY = 9999;
+  const FREE_SEC   = 300;
+  const PAID_SEC   = 300;
 
   const modes = [
     { key:'laugh',     emoji:'😄', name:'소리내서 웃기',  desc:'웃음 강도와 리듬으로 점수를 계산합니다.', mission:'크게 웃어보세요! 하하하~ 호호호~', locked:false },
