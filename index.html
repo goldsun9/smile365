@@ -1434,8 +1434,7 @@
   </div>
 </div>
 
-<!-- 구매 유도 모달 제거됨 -->
-<div class="modal" id="limitModal" style="display:none!important;"></div>
+
 
 <script>
   /* ─── MP3 인라인 데이터 ─── */
@@ -1909,10 +1908,6 @@
   }
 
   async function startRun() {
-    if (getRem() === 0) {
-      document.getElementById('limitModal').classList.add('show');
-      return;
-    }
     resetRun();
 
     // 마이크 API 자체가 없는 경우 (구형 브라우저)
