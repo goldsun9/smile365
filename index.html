@@ -1064,6 +1064,15 @@
     <!-- 발음 따라하기 예시 카드 (해당 모드 선택 시만 표시) -->
     <div id="pronounceExamples" style="display:none;">
 
+      <!-- 녹음 중 안내 배너 -->
+      <div id="pronounceRecBanner" style="display:none; align-items:center; justify-content:center; gap:10px; background:linear-gradient(135deg,#FF6B35,#F4A227); border-radius:16px; padding:16px 20px; margin-bottom:16px; color:#fff;">
+        <span style="display:inline-block;width:12px;height:12px;background:#fff;border-radius:50%;animation:blink 1s infinite;flex-shrink:0;"></span>
+        <div>
+          <div style="font-size:17px;font-weight:900;">🎙️ 녹음 중 — 예시를 보며 따라하세요!</div>
+          <div style="font-size:13px;opacity:.85;margin-top:2px;">소리 내서 천천히, 크게 읽어 보세요 😄</div>
+        </div>
+      </div>
+
       <!-- 기초 발음 -->
       <div class="card" style="border-left:4px solid var(--primary);">
         <div class="card-title" style="font-size:19px;">🗣️ 기초 발음 따라하기</div>
@@ -1285,20 +1294,6 @@
           </div>
         </div>
         <button class="yt-btn" onclick="openYoutube()">채널 보기</button>
-      </div>
-      <div class="yt-links">
-        <button class="yt-link-btn" onclick="openYoutubeSearch('웃음 체조')">
-          🎬 웃음 체조
-        </button>
-        <button class="yt-link-btn" onclick="openYoutubeSearch('치매예방 발음')">
-          🎬 치매예방 발음
-        </button>
-        <button class="yt-link-btn" onclick="openYoutubeSearch('건강박수')">
-          🎬 건강박수
-        </button>
-        <button class="yt-link-btn" onclick="openYoutubeSearch('웃음 노래')">
-          🎬 웃음 노래
-        </button>
       </div>
     </div>
 
@@ -1904,6 +1899,8 @@
     document.getElementById('pronounceStartBtn').style.display = 'none';
     document.getElementById('songExamples').style.display = 'none';
     document.getElementById('songStartBtn').style.display = 'none';
+    const recBanner = document.getElementById('pronounceRecBanner');
+    if (recBanner) recBanner.style.display = 'none';
     updateLive(0, 0, 0, 0);
   }
 
@@ -1937,7 +1934,18 @@
     recActive = true; startTime = performance.now();
     document.getElementById('floatModeName').textContent = curMode.name;
     document.getElementById('floatProgress').style.display = 'block';
-    document.getElementById('live4-section').scrollIntoView({ behavior:'smooth', block:'center' });
+
+    // ── 발음 따라하기: 녹음 중에도 예시 카드 표시 ──
+    if (curMode.key === 'pronounce') {
+      document.getElementById('pronounceExamples').style.display = 'block';
+      const recBanner = document.getElementById('pronounceRecBanner');
+      if (recBanner) recBanner.style.display = 'flex';
+      setTimeout(() => {
+        document.getElementById('pronounceExamples').scrollIntoView({ behavior:'smooth', block:'start' });
+      }, 200);
+    } else {
+      document.getElementById('live4-section').scrollIntoView({ behavior:'smooth', block:'center' });
+    }
     analyzeAudio();
     timer = setInterval(() => {
       const el = (performance.now() - startTime) / 1000;
@@ -1945,7 +1953,7 @@
       progress = Math.min(100, (el / st) * 100);
       document.getElementById('floatBar').style.width   = progress + '%';
       document.getElementById('floatPct').textContent   = Math.floor(progress) + '%';
-      document.getElementById('floatTimer').textContent = Math.floor(el) + '초';
+      const mm = Math.floor(el/60), ss = Math.floor(el%60); document.getElementById('floatTimer').textContent = mm + ':' + String(ss).padStart(2,'0');
       if (el >= st) finishRun();
     }, 200);
   }
@@ -2360,12 +2368,7 @@
   }
 
   function openYoutube() {
-    window.open('https://www.youtube.com/@뇌팔청춘365', '_blank');
-  }
-
-  function openYoutubeSearch(keyword) {
-    const q = encodeURIComponent('뇌팔청춘365 ' + keyword);
-    window.open('https://www.youtube.com/results?search_query=' + q, '_blank');
+    window.open('https://www.youtube.com/@%EB%87%8C%ED%8C%94%EC%B2%AD%EC%B6%98365', '_blank');
   }
 
   /* ─── 초기화 ─── */
