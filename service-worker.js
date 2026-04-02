@@ -1,16 +1,15 @@
 /* =====================================================
-   뇌팔청춘365 — Service Worker v1.0
+   뇌팔청춘365 — Service Worker v2.0
    오프라인 캐시 & 빠른 로딩 지원
    ===================================================== */
 
-const CACHE_NAME = 'smile365-v1.0.0';
+const CACHE_NAME = 'smile365-v2.0.0';  // ← 버전 올릴 때마다 여기 숫자 변경
 
-// 캐시할 파일 목록
 const ASSETS = [
   '/index.html',
   '/manifest.json',
-  '/icons/icon-192x192.png',
-  '/icons/icon-512x512.png',
+  '/Icons/icon-192x192.png',
+  '/Icons/icon-512x512.png',
   'https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap'
 ];
 
@@ -35,25 +34,21 @@ self.addEventListener('activate', event => {
   );
 });
 
-/* ── fetch: 캐시 우선, 없으면 네트워크 ── */
+/* ── fetch: 네트워크 우선, 없으면 캐시 ── */
 self.addEventListener('fetch', event => {
-  // POST 요청은 캐시 무시
   if (event.request.method !== 'GET') return;
 
   event.respondWith(
-    caches.match(event.request).then(cached => {
-      if (cached) return cached;
-
-      return fetch(event.request).then(response => {
-        // 유효한 응답만 캐시
-        if (!response || response.status !== 200 || response.type === 'opaque') {
-          return response;
-        }
-        const clone = response.clone();
-        caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+    fetch(event.request).then(response => {
+      if (!response || response.status !== 200 || response.type === 'opaque') {
         return response;
-      }).catch(() => {
-        // 오프라인 fallback — 메인 HTML 반환
+      }
+      const clone = response.clone();
+      caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
+      return response;
+    }).catch(() => {
+      return caches.match(event.request).then(cached => {
+        if (cached) return cached;
         if (event.request.destination === 'document') {
           return caches.match('/index.html');
         }
@@ -68,8 +63,8 @@ self.addEventListener('push', event => {
   const title = data.title || '뇌팔청춘365';
   const options = {
     body: data.body || '오늘의 뇌팔청춘 훈련이 기다리고 있어요! 😄',
-    icon: '/icons/icon-192x192.png',
-    badge: '/icons/icon-72x72.png',
+    icon: '/Icons/icon-192x192.png',
+    badge: '/Icons/icon-72x72.png',
     lang: 'ko',
     vibrate: [100, 50, 100],
     data: { url: data.url || '/' }

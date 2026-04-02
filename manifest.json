@@ -1,35 +1,32 @@
 {
   "name": "뇌팔청춘365",
-  "short_name": "뇌팔청춘",
+  "short_name": "뇌팔청춘365",
   "description": "매일 5분 두뇌를 깨우는 치매예방 트레이닝 | Lively Brain 365",
-  "start_url": "https://smile365.pages.dev/index.html",
+  "start_url": "/index.html",
+  "scope": "/",
   "display": "standalone",
   "orientation": "portrait",
-  "background_color": "#faf9f7",
+  "background_color": "#FF6B35",
   "theme_color": "#FF6B35",
   "lang": "ko",
   "categories": ["health", "lifestyle", "medical"],
   "icons": [
-    { "src": "icons/icon-72x72.png", "sizes": "72x72", "type": "image/png", "purpose": "maskable any" },
-    { "src": "icons/icon-96x96.png", "sizes": "96x96", "type": "image/png", "purpose": "maskable any" },
-    { "src": "icons/icon-128x128.png", "sizes": "128x128", "type": "image/png", "purpose": "maskable any" },
-    { "src": "icons/icon-144x144.png", "sizes": "144x144", "type": "image/png", "purpose": "maskable any" },
-    { "src": "icons/icon-152x152.png", "sizes": "152x152", "type": "image/png", "purpose": "maskable any" },
-    { "src": "icons/icon-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable any" },
-    { "src": "icons/icon-384x384.png", "sizes": "384x384", "type": "image/png", "purpose": "maskable any" },
-    { "src": "icons/icon-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable any" }
-  ],
-  "screenshots": [
-    { "src": "screenshots/screen1.png", "sizes": "1080x1920", "type": "image/png", "form_factor": "narrow", "label": "홈 화면 — 오늘의 미션" },
-    { "src": "screenshots/screen2.png", "sizes": "1080x1920", "type": "image/png", "form_factor": "narrow", "label": "발성 훈련 화면" }
+    { "src": "Icons/icon-72x72.png",   "sizes": "72x72",   "type": "image/png", "purpose": "maskable any" },
+    { "src": "Icons/icon-96x96.png",   "sizes": "96x96",   "type": "image/png", "purpose": "maskable any" },
+    { "src": "Icons/icon-128x128.png", "sizes": "128x128", "type": "image/png", "purpose": "maskable any" },
+    { "src": "Icons/icon-144x144.png", "sizes": "144x144", "type": "image/png", "purpose": "maskable any" },
+    { "src": "Icons/icon-152x152.png", "sizes": "152x152", "type": "image/png", "purpose": "maskable any" },
+    { "src": "Icons/icon-192x192.png", "sizes": "192x192", "type": "image/png", "purpose": "maskable any" },
+    { "src": "Icons/icon-384x384.png", "sizes": "384x384", "type": "image/png", "purpose": "maskable any" },
+    { "src": "Icons/icon-512x512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable any" }
   ],
   "shortcuts": [
     {
       "name": "오늘의 훈련 시작",
       "short_name": "훈련 시작",
       "description": "바로 오늘의 뇌팔청춘 훈련 시작",
-      "url": "https://smile365.pages.dev/index.html#train",
-      "icons": [{ "src": "icons/icon-96x96.png", "sizes": "96x96" }]
+      "url": "/index.html#train",
+      "icons": [{ "src": "Icons/icon-96x96.png", "sizes": "96x96" }]
     }
   ],
   "prefer_related_applications": false
