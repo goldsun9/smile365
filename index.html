@@ -852,6 +852,107 @@
     .review-txt{ font-size:15px; color:var(--text); line-height:1.6; margin-bottom:8px; }
     .review-name{ font-size:13px; color:var(--text-muted); }
 
+    /* ── 감사노트 ── */
+    .thanks-modal-wrap {
+      display:none; position:fixed; inset:0;
+      background:rgba(0,0,0,.55); z-index:300;
+      align-items:flex-end; justify-content:center;
+    }
+    .thanks-modal-wrap.show { display:flex; }
+    .thanks-sheet {
+      background:#fff; border-radius:28px 28px 0 0;
+      padding:24px 20px 40px; width:100%; max-width:680px;
+      max-height:88vh; overflow-y:auto;
+      animation:slideUp .25s ease;
+    }
+    .tn-handle { width:40px;height:4px;background:#e0e0e0;border-radius:99px;margin:0 auto 20px; }
+    .tn-title  { font-size:22px;font-weight:900;color:#3b1f6e;margin-bottom:6px; }
+    .tn-sub    { font-size:15px;color:#888;margin-bottom:20px; }
+
+    /* 녹음 버튼 */
+    .rec-btn {
+      width:90px;height:90px;border-radius:50%;border:none;cursor:pointer;
+      display:flex;flex-direction:column;align-items:center;justify-content:center;
+      font-size:32px;margin:0 auto 14px;
+      background:linear-gradient(135deg,#6c3483,#9b59b6);
+      box-shadow:0 6px 20px rgba(108,52,131,.4);
+      transition:all .2s; font-family:inherit;
+    }
+    .rec-btn.recording {
+      background:linear-gradient(135deg,#c0392b,#e74c3c);
+      box-shadow:0 6px 20px rgba(231,76,60,.5);
+      animation:pulse 1s infinite;
+    }
+    .rec-btn-label { font-size:12px;color:#fff;font-weight:700;margin-top:4px; }
+    @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.07)} }
+
+    /* 텍스트 결과 박스 */
+    .tn-result {
+      background:#faf7ff;border:1.5px solid #d9c9f5;border-radius:16px;
+      padding:18px;min-height:80px;margin-bottom:16px;
+      font-size:17px;color:#2d1b5e;line-height:1.7;
+      font-weight:500;white-space:pre-wrap;
+    }
+    .tn-result.interim { color:#9b59b6; }
+    .tn-result-placeholder { color:#bbb;font-size:15px; }
+
+    /* 감사노트 기록 */
+    .tn-list-header {
+      display:flex; align-items:center; justify-content:space-between;
+      margin-bottom:18px; padding-bottom:14px;
+      border-bottom:2px solid #f0e6ff;
+    }
+    .tn-list-count {
+      font-size:13px; font-weight:700; color:#9b59b6;
+      background:#f5eeff; border-radius:99px; padding:4px 12px;
+    }
+    .tn-note-item {
+      border:none; border-radius:18px;
+      padding:18px 20px; margin-bottom:14px;
+      background:linear-gradient(135deg,#fdf9ff,#f7f0ff);
+      box-shadow:0 2px 12px rgba(108,52,131,.08);
+      position:relative; overflow:hidden;
+    }
+    .tn-note-item::before {
+      content:''; position:absolute;
+      left:0; top:0; bottom:0; width:4px;
+      background:linear-gradient(180deg,#9b59b6,#6c3483);
+      border-radius:4px 0 0 4px;
+    }
+    .tn-note-date {
+      font-size:13px; font-weight:700; color:#9b59b6;
+      margin-bottom:10px; display:flex; align-items:center; gap:8px;
+    }
+    .tn-note-day-badge {
+      background:linear-gradient(135deg,#6c3483,#9b59b6);
+      color:#fff; border-radius:8px; padding:3px 10px;
+      font-size:12px; font-weight:700;
+    }
+    .tn-note-text {
+      font-size:16px; color:#2d1b5e; line-height:1.8;
+      font-style:italic;
+    }
+    .tn-note-text::before { content:'"'; color:#c9a0f0; font-size:22px; line-height:0; vertical-align:-6px; margin-right:3px; }
+    .tn-note-text::after  { content:'"'; color:#c9a0f0; font-size:22px; line-height:0; vertical-align:-6px; margin-left:3px; }
+    .tn-note-del {
+      position:absolute; top:12px; right:14px;
+      background:none; border:none; font-size:16px;
+      color:#ddd; cursor:pointer; padding:4px;
+    }
+    .tn-note-del:hover { color:#e74c3c; }
+    .tn-empty { text-align:center;padding:40px 20px;color:#bbb; }
+    .tn-empty-icon { font-size:56px;margin-bottom:14px; }
+    .tn-stats-bar {
+      display:grid; grid-template-columns:1fr 1fr;
+      gap:10px; margin-bottom:20px;
+    }
+    .tn-stat {
+      background:#f5eeff; border-radius:14px; padding:14px;
+      text-align:center;
+    }
+    .tn-stat-num { font-size:28px; font-weight:900; color:#6c3483; }
+    .tn-stat-lbl { font-size:12px; color:#9b59b6; margin-top:2px; }
+
     /* ── 반응형 ── */
     @media(max-width:480px){
       .hero-title{ font-size:22px; }
@@ -992,12 +1093,15 @@
         </div>
     </div><!-- /.mc-list -->
 
-      <!-- 감사하기 완료 버튼 -->
+      <!-- 감사하기 버튼 -->
       <div id="thanksArea" style="margin-top:14px;">
-        <button id="thanksBtn" class="btn btn-thanks" onclick="completeThanks()">
-          🙏 오늘의 감사하기 완료!
+        <button id="thanksBtn" class="btn btn-thanks" onclick="openThanksModal()">
+          🙏 오늘의 감사하기 — 말하기
         </button>
-        <div style="font-size:13px;color:var(--text-muted);text-align:center;margin-top:8px;" id="thanksDoneMsg" style="display:none;"></div>
+        <div id="thanksDoneMsg" style="display:none;font-size:14px;color:#9b59b6;text-align:center;margin-top:10px;font-weight:700;line-height:1.6;"></div>
+        <button onclick="openThanksNoteList()" style="margin-top:10px;width:100%;padding:12px;background:#f5eeff;color:#7d3fbd;border:1.5px solid #d4b5f5;border-radius:14px;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;">
+          📖 감사노트 전체 보기
+        </button>
       </div>
     </div><!-- /.mission-board -->
 
@@ -2322,54 +2426,250 @@
     setTimeout(() => startRun(), 300);
   }
 
-  // 감사하기 완료 처리
-  const THANKS_PROMPTS = [
-    '오늘 감사한 사람이 있나요? 🙏',
-    '오늘 좋았던 일 하나를 생각해 보세요 😊',
-    '오늘 내 몸이 건강한 것에 감사해요 💪',
-    '오늘 맛있는 것을 먹었다면 감사해요 🍚',
-    '오늘 누군가의 웃음을 봤다면 감사해요 😄',
-    '오늘 하루를 살아있음에 감사해요 🌟',
-    '오늘 햇살이 좋았다면 감사해요 ☀️',
-    '오늘 가족이 곁에 있음에 감사해요 👨‍👩‍👧',
-    '오늘 이 앱을 열어준 나 자신에게 감사해요 🎉',
-    '오늘 웃을 수 있었음에 감사해요 😁',
-  ];
+  /* ══════════════════════════════════════════
+     🙏 감사노트 — 음성→텍스트 & 날짜별 저장
+  ══════════════════════════════════════════ */
+  const TNK = 'hw_thanks_notes_v1'; // localStorage 키
+  let thanksRecognition = null;
+  let thanksRecording   = false;
+  let thanksFinalText   = '';
+  let thanksInterimText = '';
 
-  function completeThanks() {
-    const m = loadMission();
-    if (m.thanks >= 1) return; // 이미 완료
-    // 랜덤 감사 문구 표시
-    const seed2 = getTodaySeed() + 777;
-    const rand3 = seededRand(seed2);
-    const prompt = THANKS_PROMPTS[Math.floor(rand3() * THANKS_PROMPTS.length)];
-    // 버튼 상태 변경
-    const btn = document.getElementById('thanksBtn');
-    btn.textContent = '✅ 감사하기 완료!';
-    btn.classList.add('done');
-    btn.disabled = true;
-    document.getElementById('thanksDoneMsg').textContent = prompt;
-    document.getElementById('thanksDoneMsg').style.display = 'block';
-    // 미션 카운트 업데이트
-    addMissionCount('thanks', 0);
+  // ── localStorage: 노트 로드/저장 ──
+  function loadThanksNotes() {
+    try { return JSON.parse(localStorage.getItem(TNK) || '{}'); } catch { return {}; }
+  }
+  function saveThanksNotes(notes) {
+    localStorage.setItem(TNK, JSON.stringify(notes));
+  }
+  function todayKey() {
+    return new Date().toLocaleDateString('ko-KR', { year:'numeric', month:'2-digit', day:'2-digit' });
   }
 
-  function updateThanksBtn() {
+  // ── 모달 열기/닫기 ──
+  function openThanksModal() {
+    thanksFinalText   = '';
+    thanksInterimText = '';
+    // 오늘 이미 저장된 노트가 있으면 불러오기
+    const notes   = loadThanksNotes();
+    const todayTxt = notes[todayKey()] || '';
+    const box     = document.getElementById('tnResultBox');
+    if (todayTxt) {
+      box.innerHTML = '';
+      box.textContent = todayTxt;
+      box.classList.remove('interim');
+      thanksFinalText = todayTxt;
+      document.getElementById('tnSaveBtn').disabled = false;
+      document.getElementById('tnSubMsg').textContent = '오늘의 감사가 이미 저장되어 있어요 😊 수정하거나 다시 말씀하셔도 됩니다.';
+    } else {
+      box.innerHTML = '<span class="tn-result-placeholder">여기에 말씀하신 내용이 텍스트로 나타납니다 ✨</span>';
+      box.classList.remove('interim');
+      document.getElementById('tnSaveBtn').disabled = true;
+      document.getElementById('tnSubMsg').textContent = '버튼을 눌러 감사한 일을 말씀해 보세요';
+    }
+    resetRecBtn();
+    document.getElementById('thanksModal').classList.add('show');
+  }
+
+  function closeThanksModal(e) {
+    if (e && e.target !== document.getElementById('thanksModal')) return;
+    _stopThanksRec();
+    document.getElementById('thanksModal').classList.remove('show');
+  }
+
+  // ── 녹음 토글 ──
+  function toggleThanksRec() {
+    if (thanksRecording) {
+      _stopThanksRec();
+    } else {
+      _startThanksRec();
+    }
+  }
+
+  function _startThanksRec() {
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SR) {
+      alert('이 브라우저는 음성 인식을 지원하지 않아요.\nChrome 브라우저에서 사용해 주세요.');
+      return;
+    }
+    thanksRecognition = new SR();
+    thanksRecognition.lang = 'ko-KR';
+    thanksRecognition.continuous      = true;
+    thanksRecognition.interimResults  = true;
+
+    thanksRecognition.onstart = () => {
+      thanksRecording = true;
+      document.getElementById('thanksRecBtn').classList.add('recording');
+      document.getElementById('thanksRecIcon').textContent  = '⏹️';
+      document.getElementById('thanksRecLabel').textContent = '멈추기';
+      document.getElementById('thanksRecStatus').textContent = '🔴 듣고 있어요... 말씀해 주세요!';
+      document.getElementById('tnSaveBtn').disabled = true;
+    };
+
+    thanksRecognition.onresult = (e) => {
+      let interim = '';
+      let final   = thanksFinalText;
+      for (let i = e.resultIndex; i < e.results.length; i++) {
+        const txt = e.results[i][0].transcript;
+        if (e.results[i].isFinal) { final += txt; }
+        else { interim += txt; }
+      }
+      thanksFinalText   = final;
+      thanksInterimText = interim;
+      const box = document.getElementById('tnResultBox');
+      box.textContent = (final + interim) || '';
+      if (!final && interim) box.classList.add('interim');
+      else box.classList.remove('interim');
+    };
+
+    thanksRecognition.onend = () => {
+      thanksRecording = false;
+      resetRecBtn();
+      const box = document.getElementById('tnResultBox');
+      box.textContent = thanksFinalText || '';
+      box.classList.remove('interim');
+      document.getElementById('tnSaveBtn').disabled = !thanksFinalText.trim();
+      document.getElementById('thanksRecStatus').textContent =
+        thanksFinalText ? '✅ 인식 완료! 저장 버튼을 눌러주세요.' : '다시 시도해 주세요.';
+    };
+
+    thanksRecognition.onerror = (e) => {
+      thanksRecording = false;
+      resetRecBtn();
+      if (e.error === 'no-speech') {
+        document.getElementById('thanksRecStatus').textContent = '말소리가 감지되지 않았어요. 다시 눌러보세요.';
+      } else if (e.error === 'not-allowed') {
+        alert('마이크 권한이 필요합니다.\n브라우저 설정에서 마이크를 허용해 주세요.');
+      }
+    };
+
+    try { thanksRecognition.start(); }
+    catch(err) { console.error(err); }
+  }
+
+  function _stopThanksRec() {
+    if (thanksRecognition) { try { thanksRecognition.stop(); } catch {} }
+    thanksRecording = false;
+    resetRecBtn();
+  }
+
+  function resetRecBtn() {
+    document.getElementById('thanksRecBtn').classList.remove('recording');
+    document.getElementById('thanksRecIcon').textContent  = '🎙️';
+    document.getElementById('thanksRecLabel').textContent = '말하기';
+    if (!thanksRecording) {
+      document.getElementById('thanksRecStatus').textContent =
+        thanksFinalText ? '다시 말하려면 버튼을 누르세요.' : '마이크 버튼을 눌러 시작하세요';
+    }
+  }
+
+  // ── 감사노트 저장 ──
+  function saveThanksNote() {
+    const txt = thanksFinalText.trim();
+    if (!txt) return;
+    const notes   = loadThanksNotes();
+    notes[todayKey()] = txt;
+    saveThanksNotes(notes);
+
+    // 미션 완료 처리
     const m = loadMission();
+    if (m.thanks < 1) addMissionCount('thanks', 0);
+
+    // 버튼 상태 업데이트
+    updateThanksBtn(txt);
+
+    _stopThanksRec();
+    document.getElementById('thanksModal').classList.remove('show');
+    alert('💜 감사노트가 저장되었어요!\n오늘도 감사한 하루 보내세요 😊');
+  }
+
+  // ── 감사노트 목록 모달 ──
+  function openThanksNoteList() {
+    const notes = loadThanksNotes();
+    const keys  = Object.keys(notes).sort((a,b) => b.localeCompare(a));
+    const list  = document.getElementById('tnNoteList');
+    const stats = document.getElementById('tnStatsBar');
+
+    // 통계
+    const total = keys.length;
+    // 이번 달 개수
+    const thisMonth = new Date().toLocaleDateString('ko-KR',{year:'numeric',month:'2-digit'}).slice(0,7);
+    const monthCount = keys.filter(k => k.startsWith(thisMonth.replace(/\. /g,'.'))).length;
+    stats.innerHTML = `
+      <div class="tn-stat">
+        <div class="tn-stat-num">${total}</div>
+        <div class="tn-stat-lbl">✍️ 총 감사노트</div>
+      </div>
+      <div class="tn-stat">
+        <div class="tn-stat-num">${monthCount}</div>
+        <div class="tn-stat-lbl">📅 이번 달 기록</div>
+      </div>`;
+
+    if (!keys.length) {
+      list.innerHTML = `<div class="tn-empty">
+        <div class="tn-empty-icon">🌱</div>
+        <div style="font-size:16px;color:#bbb;line-height:1.7;">아직 저장된 감사노트가 없어요.<br>오늘 첫 번째 감사를 기록해 보세요!</div>
+      </div>`;
+    } else {
+      // 날짜 파싱해서 요일 표시
+      const days = ['일','월','화','수','목','금','토'];
+      list.innerHTML = keys.map(k => {
+        // k 형식: "2025. 01. 05." 등
+        const parts = k.replace(/\./g,'').trim().split(/\s+/);
+        let dayStr = '';
+        try {
+          const d = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
+          dayStr = days[d.getDay()] + '요일';
+        } catch {}
+        return `
+        <div class="tn-note-item" id="tn-item-${encodeURIComponent(k)}">
+          <button class="tn-note-del" onclick="deleteThanksNote('${k.replace(/'/g,"\'")}')">🗑️</button>
+          <div class="tn-note-date">
+            <span class="tn-note-day-badge">${dayStr}</span>
+            🗓️ ${k}
+          </div>
+          <div class="tn-note-text">${notes[k]}</div>
+        </div>`;
+      }).join('');
+    }
+    document.getElementById('thanksNoteListModal').classList.add('show');
+  }
+
+  function closeThanksNoteList(e) {
+    if (e && e.target !== document.getElementById('thanksNoteListModal')) return;
+    document.getElementById('thanksNoteListModal').classList.remove('show');
+  }
+
+  // ── 감사노트 삭제 ──
+  function deleteThanksNote(key) {
+    if (!confirm('이 감사노트를 삭제할까요?')) return;
+    const notes = loadThanksNotes();
+    delete notes[key];
+    saveThanksNotes(notes);
+    openThanksNoteList(); // 새로고침
+  }
+
+  // ── 감사하기 버튼 상태 업데이트 ──
+  function updateThanksBtn(savedText) {
+    const m   = loadMission();
     const btn = document.getElementById('thanksBtn');
     const msg = document.getElementById('thanksDoneMsg');
     if (!btn) return;
-    if (m.thanks >= 1) {
-      btn.textContent = '✅ 감사하기 완료!';
+
+    // 오늘 저장된 노트 확인
+    const notes    = loadThanksNotes();
+    const todayTxt = savedText || notes[todayKey()] || '';
+
+    if (m.thanks >= 1 || todayTxt) {
+      btn.textContent = '✏️ 오늘의 감사 수정하기';
       btn.classList.add('done');
-      btn.disabled = true;
-      const seed2 = getTodaySeed() + 777;
-      const rand3 = seededRand(seed2);
-      const prompt = THANKS_PROMPTS[Math.floor(rand3() * THANKS_PROMPTS.length)];
-      msg.textContent = prompt;
-      msg.style.display = 'block';
+      btn.disabled = false; // 수정 가능하게
+      if (todayTxt) {
+        msg.innerHTML = '💜 오늘의 감사: <em>"' + todayTxt.slice(0,40) + (todayTxt.length>40?'...':'') + '"</em>';
+        msg.style.display = 'block';
+      }
     } else {
-      btn.textContent = '🙏 오늘의 감사하기 완료!';
+      btn.textContent = '🙏 오늘의 감사하기 — 말하기';
       btn.classList.remove('done');
       btn.disabled = false;
       msg.style.display = 'none';
@@ -2392,6 +2692,58 @@
   document.getElementById('streakBadge').textContent = '🔥 연속 ' + getStreak() + '일째';
   document.getElementById('missionTxt').textContent  = curMode.mission;
 </script>
+<!-- ────────── 감사하기 음성 모달 ────────── -->
+<div class="thanks-modal-wrap" id="thanksModal" onclick="closeThanksModal(event)">
+  <div class="thanks-sheet">
+    <div class="tn-handle"></div>
+    <div class="tn-title">🙏 오늘의 감사하기</div>
+    <div class="tn-sub" id="tnSubMsg">버튼을 눌러 감사한 일을 말씀해 보세요</div>
+
+    <!-- 녹음 버튼 -->
+    <div style="text-align:center;margin-bottom:8px;">
+      <button class="rec-btn" id="thanksRecBtn" onclick="toggleThanksRec()">
+        <span id="thanksRecIcon">🎙️</span>
+        <span class="rec-btn-label" id="thanksRecLabel">말하기</span>
+      </button>
+      <div style="font-size:13px;color:#aaa;" id="thanksRecStatus">마이크 버튼을 눌러 시작하세요</div>
+    </div>
+
+    <!-- 텍스트 결과 -->
+    <div class="tn-result" id="tnResultBox">
+      <span class="tn-result-placeholder">여기에 말씀하신 내용이 텍스트로 나타납니다 ✨</span>
+    </div>
+
+    <!-- 저장 & 완료 버튼 -->
+    <div style="display:grid;gap:10px;">
+      <button class="btn" id="tnSaveBtn"
+        style="background:linear-gradient(135deg,#6c3483,#9b59b6);color:#fff;box-shadow:0 4px 16px rgba(108,52,131,.35);"
+        onclick="saveThanksNote()" disabled>
+        💜 감사노트 저장하기
+      </button>
+      <button class="btn btn-ghost" onclick="closeThanksModal()">닫기</button>
+    </div>
+  </div>
+</div>
+
+<!-- ────────── 감사노트 목록 모달 ────────── -->
+<div class="thanks-modal-wrap" id="thanksNoteListModal" onclick="closeThanksNoteList(event)">
+  <div class="thanks-sheet">
+    <div class="tn-handle"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+      <div>
+        <div class="tn-title" style="margin-bottom:2px;">📖 나의 감사노트</div>
+        <div style="font-size:13px;color:#aaa;">매일 감사하면 뇌가 행복해져요 💜</div>
+      </div>
+      <button onclick="closeThanksNoteList()"
+        style="background:#f5f5f5;border:none;font-size:18px;cursor:pointer;color:#aaa;width:36px;height:36px;border-radius:50%;">✕</button>
+    </div>
+    <!-- 통계 바 -->
+    <div class="tn-stats-bar" id="tnStatsBar" style="margin-top:16px;"></div>
+    <!-- 노트 목록 -->
+    <div id="tnNoteList"></div>
+  </div>
+</div>
+
 <!-- ────────── 마이크 오류 모달 ────────── -->
 <div class="modal" id="micErrorModal" onclick="closeMicModal(event)">
   <div class="modal-sheet">
