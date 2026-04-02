@@ -1391,7 +1391,7 @@
     <div style="background:var(--border-lt); border-radius:999px; height:12px; overflow:hidden; margin-bottom:14px;">
       <div id="floatBar" style="height:100%; width:0%; background:linear-gradient(90deg,var(--primary),var(--gold)); border-radius:999px; transition:width .2s ease;"></div>
     </div>
-    <button onclick="resetRun()" style="width:100%; padding:16px; background:#fff0f0; color:#d63031; border:2px solid #fac4c4; border-radius:var(--r-md); font-size:17px; font-weight:900; cursor:pointer; font-family:inherit;">
+    <button onclick="stopRun()" style="width:100%; padding:16px; background:#fff0f0; color:#d63031; border:2px solid #fac4c4; border-radius:var(--r-md); font-size:17px; font-weight:900; cursor:pointer; font-family:inherit;">
       ■ 멈추기
     </button>
   </div>
@@ -2008,6 +2008,15 @@
     rafId = requestAnimationFrame(analyzeAudio);
   }
 
+  // ── 멈추기 버튼: 녹음 중이면 점수 표시, 아니면 그냥 리셋 ──
+  function stopRun() {
+    if (recActive) {
+      finishRun();   // 점수 계산 후 표시
+    } else {
+      resetRun();    // 녹음 전/후 상태면 그냥 초기화
+    }
+  }
+
   function finishRun() {
     if (!recActive) return;
     recActive = false; clearInterval(timer);
@@ -2027,7 +2036,7 @@
     document.getElementById('scoreNum').textContent    = fs;
     document.getElementById('scoreGrade').textContent  = grd;
     document.getElementById('scoreRhythm').textContent = rs;
-    document.getElementById('scoreTime').textContent   = el.toFixed(1) + '초';
+    const mm2=Math.floor(el/60), ss2=Math.floor(el%60); document.getElementById('scoreTime').textContent = mm2>0 ? mm2+'분 '+ss2+'초' : el.toFixed(1)+'초';
     // 점수 카드로 스크롤
     sr.scrollIntoView({ behavior:'smooth', block:'center' });
     addHistory(curMode.key, fs, rs, el.toFixed(1)+'초', 'live');
