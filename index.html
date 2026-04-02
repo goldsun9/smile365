@@ -548,6 +548,56 @@
 
     /* ── 노래 가사 ── */
     .song-lyrics { display:grid; gap:12px; }
+
+    /* 녹음 준비 완료 배너 */
+    .song-ready-banner {
+      display:none; align-items:center; gap:12px;
+      background:linear-gradient(135deg,#e91e8c,#ff6b9d);
+      border-radius:16px; padding:16px 20px;
+      margin-bottom:16px; color:#fff;
+    }
+    .song-ready-banner .pulse-dot {
+      width:14px; height:14px; border-radius:50%;
+      background:#fff; flex-shrink:0;
+      animation:blink 1s infinite;
+    }
+    /* 녹음 준비 버튼 (하단 고정형) */
+    .song-rec-btn {
+      width:100%; padding:22px;
+      background:linear-gradient(135deg,#e91e8c,#ff6b35);
+      color:#fff; border:none; border-radius:var(--r-lg);
+      font-size:20px; font-weight:900; cursor:pointer;
+      font-family:inherit; letter-spacing:-.3px;
+      box-shadow:0 6px 24px rgba(233,30,140,.40);
+      transition:all .2s; display:flex;
+      align-items:center; justify-content:center; gap:10px;
+    }
+    .song-rec-btn:active { transform:scale(.97); }
+    .song-rec-btn.ready {
+      background:linear-gradient(135deg,#2EAA6B,#27ae60);
+      box-shadow:0 6px 24px rgba(46,170,107,.40);
+    }
+    /* 플레이 유도 배너 (녹음 준비 완료 후) */
+    .song-play-guide {
+      display:none; align-items:center; gap:14px;
+      background:linear-gradient(135deg,#1a3a2e,#0f4c35);
+      border-radius:18px; padding:18px 20px;
+      margin-bottom:16px; color:#fff;
+      border:2px solid #2EAA6B;
+    }
+    .song-play-guide-icon {
+      font-size:38px; flex-shrink:0;
+      animation:pulse 1s infinite;
+    }
+    .song-play-guide-txt { font-size:17px; font-weight:900; line-height:1.5; }
+    .song-play-guide-sub { font-size:13px; opacity:.8; margin-top:3px; }
+
+    /* 현재 재생 중인 가사 하이라이트 */
+    .lyric-line { transition:all .3s ease; }
+    .lyric-line.active {
+      color:var(--primary); font-size:22px;
+      font-weight:900; transform:scale(1.04);
+    }
     .lyric-group {
       background:var(--bg); border:1px solid var(--border);
       border-radius:var(--r-sm); padding:16px 18px;
@@ -885,6 +935,53 @@
     }
     .rec-btn-label { font-size:12px;color:#fff;font-weight:700;margin-top:4px; }
     @keyframes pulse { 0%,100%{transform:scale(1)} 50%{transform:scale(1.07)} }
+
+    /* 7초 타이머 링 */
+    .rec-timer-ring { position:relative; width:96px; height:96px; margin:0 auto 14px; }
+    .rec-timer-ring svg { position:absolute; top:0; left:0; transform:rotate(-90deg); }
+    .rec-timer-ring .rec-btn {
+      position:absolute; inset:3px; width:auto; height:auto; margin:0;
+    }
+    .timer-circle-bg { stroke:#e0d0f0; stroke-width:4; fill:none; }
+    .timer-circle-fg {
+      stroke:#9b59b6; stroke-width:4; fill:none;
+      stroke-dasharray:276; stroke-dashoffset:0;
+      transition:stroke-dashoffset .2s linear;
+    }
+    .timer-circle-fg.recording { stroke:#e74c3c; }
+
+    /* 입력 모드 탭 */
+    .tn-mode-tabs {
+      display:flex; background:#f5f0ff; border-radius:12px;
+      padding:4px; gap:4px; margin-bottom:16px;
+    }
+    .tn-mode-tab {
+      flex:1; padding:10px; border:none; border-radius:9px;
+      font-size:15px; font-weight:700; cursor:pointer;
+      background:transparent; color:#9b59b6; font-family:inherit;
+      transition:all .18s;
+    }
+    .tn-mode-tab.active {
+      background:#fff; color:#6c3483;
+      box-shadow:0 2px 8px rgba(108,52,131,.15);
+    }
+
+    /* 텍스트 입력창 */
+    .tn-textarea {
+      width:100%; min-height:110px; resize:none;
+      border:1.5px solid #d9c9f5; border-radius:16px;
+      padding:16px; font-size:17px; color:#2d1b5e;
+      font-family:inherit; line-height:1.7; outline:none;
+      background:#faf7ff; margin-bottom:16px;
+    }
+    .tn-textarea:focus { border-color:#9b59b6; background:#fff; }
+    .tn-textarea::placeholder { color:#bbb; }
+
+    /* 타이머 카운트 표시 */
+    .rec-countdown {
+      display:inline-block; font-size:22px; font-weight:900;
+      color:#e74c3c; min-width:28px; text-align:center;
+    }
 
     /* 텍스트 결과 박스 */
     .tn-result {
@@ -1315,8 +1412,17 @@
     <!-- 노래 따라하기 예시 카드 -->
     <div id="songExamples" style="display:none;">
 
-      <!-- 음악 플레이어 -->
-      <div class="card" style="border-left:4px solid #e91e8c; background:linear-gradient(135deg,#fff8fc,#fff0f8);">
+      <!-- ① 플레이 유도 배너 (녹음 준비 완료 후 표시) -->
+      <div class="song-play-guide" id="songPlayGuide">
+        <div class="song-play-guide-icon">▶️</div>
+        <div>
+          <div class="song-play-guide-txt">🎙️ 마이크 준비 완료!</div>
+          <div class="song-play-guide-sub">아래 ▶ 재생 버튼을 누르면<br>바로 점수 계산이 시작됩니다!</div>
+        </div>
+      </div>
+
+      <!-- ② 음악 플레이어 -->
+      <div class="card" id="songPlayerCard" style="border-left:4px solid #e91e8c; background:linear-gradient(135deg,#fff8fc,#fff0f8);">
         <div class="card-title" style="font-size:19px;">🎵 웃음 발음 체조송 1탄</div>
         <div class="card-sub">노래를 들으며 가사를 따라 불러보세요!</div>
         <div style="background:#fff; border:1.5px solid #f9d0e8; border-radius:var(--r-md); padding:16px; margin-bottom:4px;">
@@ -1327,12 +1433,13 @@
               <div style="font-size:14px; color:var(--text-muted);">뇌팔청춘365 · Goldsun9</div>
             </div>
           </div>
-          <audio id="songAudio" controls style="width:100%; height:52px; border-radius:10px; outline:none;" preload="auto">
+          <audio id="songAudio" controls style="width:100%; height:52px; border-radius:10px; outline:none;" preload="auto"
+            onplay="onSongPlay()" onpause="onSongPause()" onended="onSongEnded()">
             <source id="songAudioSrc" type="audio/mpeg">
             브라우저가 오디오를 지원하지 않습니다.
           </audio>
-          <div style="font-size:13px; color:var(--text-muted); margin-top:8px; text-align:center;">
-            ▶ 재생 버튼을 누르고 노래를 따라 불러보세요
+          <div id="songPlayHint" style="font-size:13px; color:var(--text-muted); margin-top:8px; text-align:center;">
+            ⬇️ 먼저 아래로 스크롤해서 녹음 버튼을 눌러주세요
           </div>
         </div>
       </div>
@@ -1373,11 +1480,22 @@
 
     </div><!-- /#songExamples -->
 
-    <!-- 노래 도전 시작 버튼 -->
+    <!-- 노래 녹음 버튼 (하단 고정) -->
     <div id="songStartBtn" style="display:none; margin-bottom:16px;">
-      <button class="btn btn-primary" style="font-size:20px; padding:22px; background:linear-gradient(135deg,#e91e8c,#ff6b35);" onclick="startRun()">
-        🎵 노래 도전 시작하기
+      <!-- 안내 문구 -->
+      <div style="background:linear-gradient(135deg,#fff0f8,#fff8fc); border:2px dashed #f9d0e8; border-radius:16px; padding:16px; margin-bottom:14px; text-align:center;" id="songPrepHintBox">
+        <div style="font-size:22px; margin-bottom:6px;">👆</div>
+        <div style="font-size:16px; font-weight:700; color:#c0357a;">가사를 먼저 보고 오세요!</div>
+        <div style="font-size:13px; color:var(--text-muted); margin-top:4px; line-height:1.6;">위에서 가사를 확인한 다음<br>아래 녹음 버튼을 누르세요 🎵</div>
+      </div>
+      <!-- 녹음 버튼 -->
+      <button class="song-rec-btn" id="songPrepBtn" onclick="prepareSongRun()">
+        <span id="songPrepIcon">🎙️</span>
+        <span id="songPrepLabel">녹음 버튼 누르기</span>
       </button>
+      <div style="font-size:13px;color:var(--text-muted);text-align:center;margin-top:10px;" id="songPrepHint">
+        누르면 마이크가 켜지고 위 노래 재생 시 점수가 계산됩니다
+      </div>
     </div>
 
     <!-- 인기 순위 -->
@@ -2003,6 +2121,16 @@
     document.getElementById('pronounceStartBtn').style.display = 'none';
     document.getElementById('songExamples').style.display = 'none';
     document.getElementById('songStartBtn').style.display = 'none';
+    // 노래 모드 상태 초기화
+    songMicReady = false;
+    const srb = document.getElementById('songReadyBanner');
+    if (srb) srb.style.display = 'none';
+    const spb = document.getElementById('songPrepBtn');
+    if (spb) { spb.textContent = '🎙️ 녹음 준비하기'; spb.disabled = false; spb.style.opacity = '1'; }
+    const sph = document.getElementById('songPlayHint');
+    if (sph) sph.textContent = '▶ 재생 버튼을 누르고 노래를 따라 불러보세요';
+    const audio = document.getElementById('songAudio');
+    if (audio) { try { audio.pause(); audio.currentTime = 0; } catch {} }
     const recBanner = document.getElementById('pronounceRecBanner');
     if (recBanner) recBanner.style.display = 'none';
     updateLive(0, 0, 0, 0);
@@ -2046,6 +2174,12 @@
       if (recBanner) recBanner.style.display = 'flex';
       setTimeout(() => {
         document.getElementById('pronounceExamples').scrollIntoView({ behavior:'smooth', block:'start' });
+      }, 200);
+    } else if (curMode.key === 'song') {
+      // 노래 모드: 가사 + 실시간 지표 표시
+      document.getElementById('songExamples').style.display = 'block';
+      setTimeout(() => {
+        document.getElementById('live4-section').scrollIntoView({ behavior:'smooth', block:'center' });
       }, 200);
     } else {
       document.getElementById('live4-section').scrollIntoView({ behavior:'smooth', block:'center' });
@@ -2110,6 +2244,140 @@
     lastVol = vol; smplCnt++; volSum += vol; stabSum += stab;
     updateLive(vol, stab, evCnt, clapCount);
     rafId = requestAnimationFrame(analyzeAudio);
+  }
+
+  /* ═══════════════════════════════════════
+     🎵 노래 모드 전용 로직
+  ═══════════════════════════════════════ */
+  let songMicReady = false; // 마이크 준비 완료 여부
+
+  // 1단계: 녹음 준비 (마이크만 열고 대기)
+  async function prepareSongRun() {
+    if (songMicReady) {
+      // 이미 준비됐으면 그냥 플레이어로 스크롤
+      document.getElementById('songPlayerCard').scrollIntoView({ behavior:'smooth', block:'center' });
+      return;
+    }
+
+    if (!navigator.mediaDevices?.getUserMedia) {
+      showMicError('browser'); return;
+    }
+
+    const btn   = document.getElementById('songPrepBtn');
+    const icon  = document.getElementById('songPrepIcon');
+    const label = document.getElementById('songPrepLabel');
+    const hint  = document.getElementById('songPrepHint');
+    const hintBox = document.getElementById('songPrepHintBox');
+
+    // 준비 중 상태
+    icon.textContent  = '⏳';
+    label.textContent = '마이크 준비 중...';
+    btn.disabled      = true;
+    btn.style.opacity = '0.75';
+
+    try {
+      audioStream  = await navigator.mediaDevices.getUserMedia({ audio: true });
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      analyser     = audioContext.createAnalyser();
+      analyser.fftSize = 2048; analyser.smoothingTimeConstant = 0.82;
+      micSource    = audioContext.createMediaStreamSource(audioStream);
+      micSource.connect(analyser);
+    } catch(err) {
+      icon.textContent  = '🎙️';
+      label.textContent = '녹음 버튼 누르기';
+      btn.disabled      = false;
+      btn.style.opacity = '1';
+      if (err.name === 'NotAllowedError') showMicError('denied');
+      else showMicError('notfound');
+      return;
+    }
+
+    songMicReady = true;
+
+    // ✅ 버튼 완료 상태
+    btn.classList.add('ready');
+    btn.disabled      = false;
+    btn.style.opacity = '1';
+    icon.textContent  = '✅';
+    label.textContent = '준비 완료! 위로 올라가서 재생 누르기';
+
+    // 안내 박스 → 성공 메시지로 교체
+    if (hintBox) {
+      hintBox.style.background = 'linear-gradient(135deg,#edfaf4,#d5f5e3)';
+      hintBox.style.borderColor = '#a8e6c8';
+      hintBox.innerHTML = '<div style="font-size:22px;margin-bottom:6px;">🎉</div><div style="font-size:16px;font-weight:700;color:#1a7a45;">녹음 준비 완료!</div><div style="font-size:13px;color:#2EAA6B;margin-top:4px;line-height:1.6;">이제 위로 올라가서<br>▶ 재생 버튼을 누르세요!</div>';
+    }
+
+    hint.innerHTML = '<strong style="color:#2EAA6B;">마이크 ON ✅ — 노래 재생 즉시 점수 계산 시작!</strong>';
+
+    // 플레이어 힌트 업데이트
+    const playHint = document.getElementById('songPlayHint');
+    if (playHint) {
+      playHint.innerHTML = '<strong style="color:#e91e8c;font-size:15px;animation:blink 1s infinite;display:inline-block;">▶ 지금 재생하면 점수 계산 시작! 🎤</strong>';
+    }
+
+    // 플레이 가이드 배너 표시
+    const guide = document.getElementById('songPlayGuide');
+    if (guide) guide.style.display = 'flex';
+
+    // ★ 자동으로 노래 플레이어 위치로 스크롤
+    setTimeout(() => {
+      document.getElementById('songPlayerCard').scrollIntoView({ behavior:'smooth', block:'center' });
+    }, 400);
+  }
+
+  // 2단계: 노래 재생 시작 → 점수 계산 시작
+  function onSongPlay() {
+    if (!songMicReady) {
+      // 마이크 미준비 → 잠깐 일시정지 후 자동 준비 안내
+      const audio = document.getElementById('songAudio');
+      try { audio.pause(); } catch {}
+      // 녹음 버튼으로 스크롤
+      const startBtn = document.getElementById('songStartBtn');
+      if (startBtn) setTimeout(() => startBtn.scrollIntoView({ behavior:'smooth', block:'center' }), 100);
+      alert('🎙️ 먼저 아래 녹음 버튼을 눌러 마이크를 준비해 주세요!\n준비 후 다시 재생하면 점수가 계산됩니다.');
+      return;
+    }
+    if (recActive) return;     // 이미 측정 중이면 무시
+
+    // startRun() 과 동일한 로직으로 타이머+점수 시작
+    recActive  = true;
+    startTime  = performance.now();
+    progress   = 0; smplCnt = 0; volSum = 0; stabSum = 0;
+    evCnt      = 0; lastPeak = 0; lastVol = 0; clapCount = 0; lastClapAt = 0;
+
+    document.getElementById('floatModeName').textContent = curMode.name;
+    document.getElementById('floatProgress').style.display = 'block';
+    document.getElementById('songExamples').style.display  = 'block';
+
+    analyzeAudio();
+    timer = setInterval(() => {
+      const el = (performance.now() - startTime) / 1000;
+      const st = getSecTime();
+      progress = Math.min(100, (el / st) * 100);
+      document.getElementById('floatBar').style.width   = progress + '%';
+      document.getElementById('floatPct').textContent   = Math.floor(progress) + '%';
+      const mm = Math.floor(el/60), ss = Math.floor(el%60);
+      document.getElementById('floatTimer').textContent = mm + ':' + String(ss).padStart(2,'0');
+      if (el >= st) {
+        // 시간 다 됐으면 노래도 정지
+        const audio = document.getElementById('songAudio');
+        try { audio.pause(); } catch {}
+        finishRun();
+      }
+    }, 200);
+  }
+
+  // 노래 일시정지 → 점수 계산 중지 (일시정지만, 리셋 안 함)
+  function onSongPause() {
+    if (!recActive) return;
+    clearInterval(timer);
+    // 측정은 유지 (일시정지 후 재생 시 이어서)
+  }
+
+  // 노래 종료 → 점수 표시
+  function onSongEnded() {
+    if (recActive) finishRun();
   }
 
   // ── 멈추기 버튼: 녹음 중이면 점수 표시, 아니면 그냥 리셋 ──
@@ -2427,13 +2695,16 @@
   }
 
   /* ══════════════════════════════════════════
-     🙏 감사노트 — 음성→텍스트 & 날짜별 저장
+     🙏 감사노트 — 7초 녹음 세그먼트 + 텍스트 입력
   ══════════════════════════════════════════ */
-  const TNK = 'hw_thanks_notes_v1'; // localStorage 키
+  const TNK            = 'hw_thanks_notes_v1';
   let thanksRecognition = null;
   let thanksRecording   = false;
   let thanksFinalText   = '';
-  let thanksInterimText = '';
+  let thanksMode        = 'voice';   // 'voice' | 'text'
+  let recSegTimer       = null;      // 7초 자동 종료 타이머
+  let recCountInterval  = null;      // 카운트다운 인터벌
+  const SEG_SEC         = 7;        // 세그먼트 길이 (초)
 
   // ── localStorage: 노트 로드/저장 ──
   function loadThanksNotes() {
@@ -2448,26 +2719,24 @@
 
   // ── 모달 열기/닫기 ──
   function openThanksModal() {
-    thanksFinalText   = '';
-    thanksInterimText = '';
-    // 오늘 이미 저장된 노트가 있으면 불러오기
-    const notes   = loadThanksNotes();
+    thanksFinalText = '';
+    const notes    = loadThanksNotes();
     const todayTxt = notes[todayKey()] || '';
-    const box     = document.getElementById('tnResultBox');
+
+    // 기본 음성 모드로 시작
+    switchThanksMode('voice');
+
     if (todayTxt) {
-      box.innerHTML = '';
-      box.textContent = todayTxt;
-      box.classList.remove('interim');
       thanksFinalText = todayTxt;
+      _setResultBox(todayTxt);
       document.getElementById('tnSaveBtn').disabled = false;
-      document.getElementById('tnSubMsg').textContent = '오늘의 감사가 이미 저장되어 있어요 😊 수정하거나 다시 말씀하셔도 됩니다.';
+      document.getElementById('tnSubMsg').textContent = '오늘 감사가 저장되어 있어요 😊 추가하거나 수정하세요';
     } else {
-      box.innerHTML = '<span class="tn-result-placeholder">여기에 말씀하신 내용이 텍스트로 나타납니다 ✨</span>';
-      box.classList.remove('interim');
+      _setResultBox('');
       document.getElementById('tnSaveBtn').disabled = true;
-      document.getElementById('tnSubMsg').textContent = '버튼을 눌러 감사한 일을 말씀해 보세요';
+      document.getElementById('tnSubMsg').textContent = '감사한 일을 말하거나 직접 써보세요';
     }
-    resetRecBtn();
+    _resetRecBtn();
     document.getElementById('thanksModal').classList.add('show');
   }
 
@@ -2477,13 +2746,78 @@
     document.getElementById('thanksModal').classList.remove('show');
   }
 
+  // ── 모드 전환 (음성 / 텍스트) ──
+  function switchThanksMode(mode) {
+    thanksMode = mode;
+    document.getElementById('voiceMode').style.display = mode==='voice' ? 'block' : 'none';
+    document.getElementById('textMode').style.display  = mode==='text'  ? 'block' : 'none';
+    document.getElementById('tabVoice').classList.toggle('active', mode==='voice');
+    document.getElementById('tabText').classList.toggle('active',  mode==='text');
+    if (mode === 'text') {
+      _stopThanksRec();
+      // 기존 텍스트 있으면 textarea에 채워두기
+      document.getElementById('tnTextInput').value = thanksFinalText;
+      setTimeout(()=>document.getElementById('tnTextInput').focus(), 100);
+    }
+  }
+
+  // ── 텍스트 입력 핸들러 ──
+  function onTextInput() {
+    const val = document.getElementById('tnTextInput').value.trim();
+    thanksFinalText = val;
+    document.getElementById('tnSaveBtn').disabled = !val;
+  }
+
+  // ── 결과박스 직접 수정 ──
+  function focusResultEdit() {
+    if (thanksRecording) return; // 녹음 중엔 무시
+    const box  = document.getElementById('tnResultBox');
+    const wrap = document.getElementById('tnResultEditWrap');
+    const ta   = document.getElementById('tnResultEdit');
+    box.style.display  = 'none';
+    wrap.style.display = 'block';
+    ta.value = thanksFinalText;
+    ta.focus();
+  }
+  function onResultEditInput() {
+    thanksFinalText = document.getElementById('tnResultEdit').value;
+    document.getElementById('tnSaveBtn').disabled = !thanksFinalText.trim();
+  }
+  function applyResultEdit() {
+    thanksFinalText = document.getElementById('tnResultEdit').value.trim();
+    document.getElementById('tnResultEditWrap').style.display = 'none';
+    _setResultBox(thanksFinalText);
+    document.getElementById('tnSaveBtn').disabled = !thanksFinalText;
+  }
+
+  // ── 결과박스 텍스트 세팅 ──
+  function _setResultBox(txt) {
+    const box = document.getElementById('tnResultBox');
+    const ph  = document.getElementById('tnPlaceholder');
+    box.style.display  = 'block';
+    document.getElementById('tnResultEditWrap').style.display = 'none';
+    if (txt) {
+      ph.style.display   = 'none';
+      box.childNodes.forEach(n => { if(n !== ph) n.remove(); });
+      // textNode로 삽입
+      const existing = box.querySelector('.tn-live-text');
+      if (existing) existing.remove();
+      const span = document.createElement('span');
+      span.className = 'tn-live-text';
+      span.textContent = txt;
+      box.appendChild(span);
+      box.classList.remove('interim');
+    } else {
+      ph.style.display = '';
+      const existing = box.querySelector('.tn-live-text');
+      if (existing) existing.remove();
+    }
+  }
+
   // ── 녹음 토글 ──
   function toggleThanksRec() {
-    if (thanksRecording) {
-      _stopThanksRec();
-    } else {
-      _startThanksRec();
-    }
+    if (thanksRecording) { _stopThanksRec(); }
+    else                 { _startThanksRec(); }
   }
 
   function _startThanksRec() {
@@ -2492,54 +2826,110 @@
       alert('이 브라우저는 음성 인식을 지원하지 않아요.\nChrome 브라우저에서 사용해 주세요.');
       return;
     }
+
+    // 이전 인식기 정리
+    if (thanksRecognition) { try { thanksRecognition.abort(); } catch {} }
+
     thanksRecognition = new SR();
-    thanksRecognition.lang = 'ko-KR';
-    thanksRecognition.continuous      = true;
+    thanksRecognition.lang            = 'ko-KR';
+    thanksRecognition.continuous      = false;  // ★ 단발 모드 (반복 방지)
     thanksRecognition.interimResults  = true;
+    thanksRecognition.maxAlternatives = 1;
+
+    let segmentText = ''; // 이번 세그먼트에서 인식된 텍스트
 
     thanksRecognition.onstart = () => {
       thanksRecording = true;
+      segmentText     = '';
       document.getElementById('thanksRecBtn').classList.add('recording');
+      document.getElementById('timerCircle').classList.add('recording');
       document.getElementById('thanksRecIcon').textContent  = '⏹️';
       document.getElementById('thanksRecLabel').textContent = '멈추기';
-      document.getElementById('thanksRecStatus').textContent = '🔴 듣고 있어요... 말씀해 주세요!';
       document.getElementById('tnSaveBtn').disabled = true;
+
+      // 7초 카운트다운
+      let remain = SEG_SEC;
+      const circumference = 2 * Math.PI * 44; // 276
+      document.getElementById('countdownWrap').style.display = 'block';
+      document.getElementById('recCountdown').textContent = remain;
+      document.getElementById('timerCircle').style.strokeDashoffset = 0;
+      document.getElementById('thanksRecStatus').textContent = '🔴 듣고 있어요... 말씀해 주세요!';
+
+      recCountInterval = setInterval(() => {
+        remain--;
+        document.getElementById('recCountdown').textContent = remain;
+        // 원형 진행 (276 → 0)
+        document.getElementById('timerCircle').style.strokeDashoffset =
+          circumference * (1 - remain/SEG_SEC);
+        if (remain <= 0) {
+          clearInterval(recCountInterval);
+        }
+      }, 1000);
+
+      // 7초 후 자동 종료
+      recSegTimer = setTimeout(() => {
+        if (thanksRecognition) { try { thanksRecognition.stop(); } catch {} }
+      }, SEG_SEC * 1000);
     };
 
     thanksRecognition.onresult = (e) => {
       let interim = '';
-      let final   = thanksFinalText;
+      let final   = '';
       for (let i = e.resultIndex; i < e.results.length; i++) {
-        const txt = e.results[i][0].transcript;
-        if (e.results[i].isFinal) { final += txt; }
-        else { interim += txt; }
+        const t = e.results[i][0].transcript;
+        if (e.results[i].isFinal) final += t;
+        else interim += t;
       }
-      thanksFinalText   = final;
-      thanksInterimText = interim;
-      const box = document.getElementById('tnResultBox');
-      box.textContent = (final + interim) || '';
-      if (!final && interim) box.classList.add('interim');
-      else box.classList.remove('interim');
+      segmentText = final || interim;
+      // 화면엔 이전 누적 + 현재 세그먼트 합쳐서 표시
+      const combined = thanksFinalText + (final ? final : interim);
+      _setResultBox(combined);
+      if (!final && interim) document.getElementById('tnResultBox').classList.add('interim');
+      else document.getElementById('tnResultBox').classList.remove('interim');
     };
 
     thanksRecognition.onend = () => {
+      clearTimeout(recSegTimer);
+      clearInterval(recCountInterval);
       thanksRecording = false;
-      resetRecBtn();
-      const box = document.getElementById('tnResultBox');
-      box.textContent = thanksFinalText || '';
-      box.classList.remove('interim');
+
+      // 이번 세그먼트 최종 결과를 누적
+      if (segmentText) {
+        // 이전 텍스트와 자연스럽게 붙이기 (공백 처리)
+        if (thanksFinalText && !thanksFinalText.endsWith(' ') && !thanksFinalText.endsWith('\n')) {
+          thanksFinalText += ' ';
+        }
+        thanksFinalText += segmentText;
+      }
+
+      _setResultBox(thanksFinalText);
+      document.getElementById('tnResultBox').classList.remove('interim');
+      _resetRecBtn();
+
+      document.getElementById('countdownWrap').style.display = 'none';
+      document.getElementById('timerCircle').classList.remove('recording');
+      document.getElementById('timerCircle').style.strokeDashoffset = 0;
+
       document.getElementById('tnSaveBtn').disabled = !thanksFinalText.trim();
       document.getElementById('thanksRecStatus').textContent =
-        thanksFinalText ? '✅ 인식 완료! 저장 버튼을 눌러주세요.' : '다시 시도해 주세요.';
+        thanksFinalText
+          ? '✅ 완료! 더 추가하려면 다시 누르세요. 저장도 가능해요.'
+          : '다시 눌러 말씀해 주세요.';
     };
 
     thanksRecognition.onerror = (e) => {
+      clearTimeout(recSegTimer);
+      clearInterval(recCountInterval);
       thanksRecording = false;
-      resetRecBtn();
+      _resetRecBtn();
+      document.getElementById('countdownWrap').style.display = 'none';
+      document.getElementById('timerCircle').classList.remove('recording');
       if (e.error === 'no-speech') {
-        document.getElementById('thanksRecStatus').textContent = '말소리가 감지되지 않았어요. 다시 눌러보세요.';
+        document.getElementById('thanksRecStatus').textContent = '소리가 감지되지 않았어요. 다시 눌러보세요.';
       } else if (e.error === 'not-allowed') {
         alert('마이크 권한이 필요합니다.\n브라우저 설정에서 마이크를 허용해 주세요.');
+      } else if (e.error !== 'aborted') {
+        document.getElementById('thanksRecStatus').textContent = '인식 오류. 다시 눌러보세요.';
       }
     };
 
@@ -2548,36 +2938,52 @@
   }
 
   function _stopThanksRec() {
+    clearTimeout(recSegTimer);
+    clearInterval(recCountInterval);
     if (thanksRecognition) { try { thanksRecognition.stop(); } catch {} }
     thanksRecording = false;
-    resetRecBtn();
+    _resetRecBtn();
+    document.getElementById('countdownWrap').style.display = 'none';
+    const circle = document.getElementById('timerCircle');
+    if (circle) { circle.classList.remove('recording'); circle.style.strokeDashoffset = 0; }
   }
 
-  function resetRecBtn() {
-    document.getElementById('thanksRecBtn').classList.remove('recording');
+  function _resetRecBtn() {
+    const btn = document.getElementById('thanksRecBtn');
+    if (!btn) return;
+    btn.classList.remove('recording');
     document.getElementById('thanksRecIcon').textContent  = '🎙️';
     document.getElementById('thanksRecLabel').textContent = '말하기';
     if (!thanksRecording) {
       document.getElementById('thanksRecStatus').textContent =
-        thanksFinalText ? '다시 말하려면 버튼을 누르세요.' : '마이크 버튼을 눌러 시작하세요';
+        thanksFinalText
+          ? '더 추가하려면 다시 눌러 말씀하세요.'
+          : '버튼을 누르면 7초간 듣습니다';
     }
   }
 
   // ── 감사노트 저장 ──
   function saveThanksNote() {
-    const txt = thanksFinalText.trim();
+    // 현재 모드에 따라 텍스트 가져오기
+    let txt = '';
+    if (thanksMode === 'text') {
+      txt = document.getElementById('tnTextInput').value.trim();
+    } else {
+      // 직접수정 중이면 textarea 값 반영
+      const editWrap = document.getElementById('tnResultEditWrap');
+      if (editWrap && editWrap.style.display !== 'none') {
+        thanksFinalText = document.getElementById('tnResultEdit').value.trim();
+      }
+      txt = thanksFinalText.trim();
+    }
     if (!txt) return;
-    const notes   = loadThanksNotes();
+
+    const notes = loadThanksNotes();
     notes[todayKey()] = txt;
     saveThanksNotes(notes);
-
-    // 미션 완료 처리
     const m = loadMission();
     if (m.thanks < 1) addMissionCount('thanks', 0);
-
-    // 버튼 상태 업데이트
     updateThanksBtn(txt);
-
     _stopThanksRec();
     document.getElementById('thanksModal').classList.remove('show');
     alert('💜 감사노트가 저장되었어요!\n오늘도 감사한 하루 보내세요 😊');
@@ -2697,23 +3103,63 @@
   <div class="thanks-sheet">
     <div class="tn-handle"></div>
     <div class="tn-title">🙏 오늘의 감사하기</div>
-    <div class="tn-sub" id="tnSubMsg">버튼을 눌러 감사한 일을 말씀해 보세요</div>
+    <div class="tn-sub" id="tnSubMsg">감사한 일을 말하거나 직접 써보세요</div>
 
-    <!-- 녹음 버튼 -->
-    <div style="text-align:center;margin-bottom:8px;">
-      <button class="rec-btn" id="thanksRecBtn" onclick="toggleThanksRec()">
-        <span id="thanksRecIcon">🎙️</span>
-        <span class="rec-btn-label" id="thanksRecLabel">말하기</span>
-      </button>
-      <div style="font-size:13px;color:#aaa;" id="thanksRecStatus">마이크 버튼을 눌러 시작하세요</div>
+    <!-- 입력 모드 탭 -->
+    <div class="tn-mode-tabs">
+      <button class="tn-mode-tab active" id="tabVoice" onclick="switchThanksMode('voice')">🎙️ 음성으로</button>
+      <button class="tn-mode-tab"        id="tabText"  onclick="switchThanksMode('text')">✏️ 직접 쓰기</button>
     </div>
 
-    <!-- 텍스트 결과 -->
-    <div class="tn-result" id="tnResultBox">
-      <span class="tn-result-placeholder">여기에 말씀하신 내용이 텍스트로 나타납니다 ✨</span>
+    <!-- ── 음성 모드 ── -->
+    <div id="voiceMode">
+      <!-- 7초 타이머 링 + 녹음 버튼 -->
+      <div class="rec-timer-ring" style="width:96px;height:96px;margin:0 auto 10px;position:relative;">
+        <svg width="96" height="96" style="position:absolute;top:0;left:0;transform:rotate(-90deg);">
+          <circle class="timer-circle-bg" cx="48" cy="48" r="44"/>
+          <circle class="timer-circle-fg" id="timerCircle" cx="48" cy="48" r="44"/>
+        </svg>
+        <button class="rec-btn" id="thanksRecBtn" onclick="toggleThanksRec()"
+          style="position:absolute;inset:3px;width:auto;height:auto;margin:0;border-radius:50%;font-size:26px;">
+          <span id="thanksRecIcon">🎙️</span>
+          <span class="rec-btn-label" id="thanksRecLabel">말하기</span>
+        </button>
+      </div>
+
+      <!-- 상태 + 카운트다운 -->
+      <div style="text-align:center;margin-bottom:12px;">
+        <div style="font-size:14px;color:#aaa;" id="thanksRecStatus">버튼을 누르면 7초간 듣습니다</div>
+        <div id="countdownWrap" style="display:none;margin-top:4px;">
+          <span class="rec-countdown" id="recCountdown">7</span>
+          <span style="font-size:13px;color:#aaa;">초 남음</span>
+        </div>
+      </div>
+
+      <!-- 음성→텍스트 결과 (클릭하면 편집 가능) -->
+      <div class="tn-result" id="tnResultBox"
+        style="cursor:text;" onclick="focusResultEdit()"
+        title="클릭하면 직접 수정할 수 있어요">
+        <span class="tn-result-placeholder" id="tnPlaceholder">여기에 말씀하신 내용이 텍스트로 나타납니다 ✨<br><span style="font-size:13px;color:#ccc;">💡 결과를 누르면 직접 수정도 가능해요</span></span>
+      </div>
+      <div id="tnResultEditWrap" style="display:none;margin-bottom:16px;">
+        <textarea class="tn-textarea" id="tnResultEdit"
+          placeholder="내용을 직접 수정하세요..."
+          oninput="onResultEditInput()"></textarea>
+        <button onclick="applyResultEdit()"
+          style="width:100%;padding:10px;background:#f5eeff;color:#7d3fbd;border:1.5px solid #d4b5f5;border-radius:12px;font-size:14px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:8px;">
+          ✅ 수정 완료
+        </button>
+      </div>
     </div>
 
-    <!-- 저장 & 완료 버튼 -->
+    <!-- ── 텍스트 모드 ── -->
+    <div id="textMode" style="display:none;">
+      <textarea class="tn-textarea" id="tnTextInput"
+        placeholder="오늘 감사한 일을 자유롭게 써보세요 🙏&#10;예) 오늘 날씨가 너무 좋아서 감사했다 ☀️"
+        oninput="onTextInput()"></textarea>
+    </div>
+
+    <!-- 저장 버튼 -->
     <div style="display:grid;gap:10px;">
       <button class="btn" id="tnSaveBtn"
         style="background:linear-gradient(135deg,#6c3483,#9b59b6);color:#fff;box-shadow:0 4px 16px rgba(108,52,131,.35);"
