@@ -1424,8 +1424,8 @@
       <div class="song-play-guide" id="songPlayGuide">
         <div class="song-play-guide-icon">▶️</div>
         <div>
-          <div class="song-play-guide-txt">🎙️ 마이크 준비 완료!</div>
-          <div class="song-play-guide-sub">아래 ▶ 재생 버튼을 누르면<br>바로 점수 계산이 시작됩니다!</div>
+          <div class="song-play-guide-txt">준비 완료! 🎵</div>
+          <div class="song-play-guide-sub">▶ 재생 버튼을 누르면<br>마이크가 켜지고 점수 계산이 시작됩니다!</div>
         </div>
       </div>
 
@@ -1488,21 +1488,14 @@
 
     </div><!-- /#songExamples -->
 
-    <!-- 노래 녹음 버튼 (하단 고정) -->
+    <!-- 노래 시작 버튼 (하단) -->
     <div id="songStartBtn" style="display:none; margin-bottom:16px;">
-      <!-- 안내 문구 -->
-      <div style="background:linear-gradient(135deg,#fff0f8,#fff8fc); border:2px dashed #f9d0e8; border-radius:16px; padding:16px; margin-bottom:14px; text-align:center;" id="songPrepHintBox">
-        <div style="font-size:22px; margin-bottom:6px;">👆</div>
-        <div style="font-size:16px; font-weight:700; color:#c0357a;">가사를 먼저 보고 오세요!</div>
-        <div style="font-size:13px; color:var(--text-muted); margin-top:4px; line-height:1.6;">위에서 가사를 확인한 다음<br>아래 녹음 버튼을 누르세요 🎵</div>
-      </div>
-      <!-- 녹음 버튼 -->
       <button class="song-rec-btn" id="songPrepBtn" onclick="prepareSongRun()">
-        <span id="songPrepIcon">🎙️</span>
-        <span id="songPrepLabel">녹음 버튼 누르기</span>
+        <span id="songPrepIcon">✅</span>
+        <span id="songPrepLabel">가사 확인 완료! 위로 올라가서 재생하기 ▶</span>
       </button>
       <div style="font-size:13px;color:var(--text-muted);text-align:center;margin-top:10px;" id="songPrepHint">
-        누르면 마이크가 켜지고 위 노래 재생 시 점수가 계산됩니다
+        재생 버튼을 누르는 순간 마이크가 켜지고 점수 계산이 시작됩니다 🎙️
       </div>
     </div>
 
@@ -2294,96 +2287,72 @@
   ═══════════════════════════════════════ */
   let songMicReady = false; // 마이크 준비 완료 여부
 
-  // 1단계: 녹음 준비 (마이크만 열고 대기)
-  async function prepareSongRun() {
-    if (songMicReady) {
-      // 이미 준비됐으면 그냥 플레이어로 스크롤
-      document.getElementById('songPlayerCard').scrollIntoView({ behavior:'smooth', block:'center' });
-      return;
-    }
-
-    if (!navigator.mediaDevices?.getUserMedia) {
-      showMicError('browser'); return;
-    }
-
-    const btn   = document.getElementById('songPrepBtn');
-    const icon  = document.getElementById('songPrepIcon');
-    const label = document.getElementById('songPrepLabel');
-    const hint  = document.getElementById('songPrepHint');
-    const hintBox = document.getElementById('songPrepHintBox');
-
-    // 준비 중 상태
-    icon.textContent  = '⏳';
-    label.textContent = '마이크 준비 중...';
-    btn.disabled      = true;
-    btn.style.opacity = '0.75';
-
-    try {
-      audioStream  = await navigator.mediaDevices.getUserMedia({ audio: true });
-      audioContext = new (window.AudioContext || window.webkitAudioContext)();
-      analyser     = audioContext.createAnalyser();
-      analyser.fftSize = 2048; analyser.smoothingTimeConstant = 0.82;
-      micSource    = audioContext.createMediaStreamSource(audioStream);
-      micSource.connect(analyser);
-    } catch(err) {
-      icon.textContent  = '🎙️';
-      label.textContent = '녹음 버튼 누르기';
-      btn.disabled      = false;
-      btn.style.opacity = '1';
-      if (err.name === 'NotAllowedError') showMicError('denied');
-      else showMicError('notfound');
-      return;
-    }
-
-    songMicReady = true;
-
-    // ✅ 버튼 완료 상태
-    btn.classList.add('ready');
-    btn.disabled      = false;
-    btn.style.opacity = '1';
-    icon.textContent  = '✅';
-    label.textContent = '준비 완료! 위로 올라가서 재생 누르기';
-
-    // 안내 박스 → 성공 메시지로 교체
-    if (hintBox) {
-      hintBox.style.background = 'linear-gradient(135deg,#edfaf4,#d5f5e3)';
-      hintBox.style.borderColor = '#a8e6c8';
-      hintBox.innerHTML = '<div style="font-size:22px;margin-bottom:6px;">🎉</div><div style="font-size:16px;font-weight:700;color:#1a7a45;">녹음 준비 완료!</div><div style="font-size:13px;color:#2EAA6B;margin-top:4px;line-height:1.6;">이제 위로 올라가서<br>▶ 재생 버튼을 누르세요!</div>';
-    }
-
-    hint.innerHTML = '<strong style="color:#2EAA6B;">마이크 ON ✅ — 노래 재생 즉시 점수 계산 시작!</strong>';
-
-    // 플레이어 힌트 업데이트
-    const playHint = document.getElementById('songPlayHint');
-    if (playHint) {
-      playHint.innerHTML = '<strong style="color:#e91e8c;font-size:15px;animation:blink 1s infinite;display:inline-block;">▶ 지금 재생하면 점수 계산 시작! 🎤</strong>';
-    }
-
+  // 하단 버튼: 가사 확인 후 플레이어로 스크롤
+  function prepareSongRun() {
     // 플레이 가이드 배너 표시
     const guide = document.getElementById('songPlayGuide');
     if (guide) guide.style.display = 'flex';
 
-    // ★ 자동으로 노래 플레이어 위치로 스크롤
+    // 플레이어 힌트 강조
+    const playHint = document.getElementById('songPlayHint');
+    if (playHint) {
+      playHint.innerHTML = '<strong style="color:#e91e8c;font-size:15px;">▶ 재생하면 마이크 켜지고 점수 계산 시작! 🎤</strong>';
+    }
+
+    // 버튼 상태 변경
+    const btn   = document.getElementById('songPrepBtn');
+    const icon  = document.getElementById('songPrepIcon');
+    const label = document.getElementById('songPrepLabel');
+    if (btn)   btn.classList.add('ready');
+    if (icon)  icon.textContent  = '🎵';
+    if (label) label.textContent = '위로 올라가서 ▶ 재생 누르기!';
+
+    // 노래 플레이어로 스크롤
     setTimeout(() => {
       document.getElementById('songPlayerCard').scrollIntoView({ behavior:'smooth', block:'center' });
-    }, 400);
+    }, 150);
   }
 
-  // 2단계: 노래 재생 시작 → 점수 계산 시작
+  // 노래 재생 시작 → 마이크 셋업 + 점수 계산 시작
   function onSongPlay() {
-    if (!songMicReady) {
-      // 마이크 미준비 → 잠깐 일시정지 후 자동 준비 안내
-      const audio = document.getElementById('songAudio');
-      try { audio.pause(); } catch {}
-      // 녹음 버튼으로 스크롤
-      const startBtn = document.getElementById('songStartBtn');
-      if (startBtn) setTimeout(() => startBtn.scrollIntoView({ behavior:'smooth', block:'center' }), 100);
-      alert('🎙️ 먼저 아래 녹음 버튼을 눌러 마이크를 준비해 주세요!\n준비 후 다시 재생하면 점수가 계산됩니다.');
-      return;
-    }
-    if (recActive) return;     // 이미 측정 중이면 무시
+    if (recActive) return; // 이미 측정 중이면 무시
+    if (curMode.key !== 'song') return; // 노래 모드가 아니면 무시
 
-    // startRun() 과 동일한 로직으로 타이머+점수 시작
+    // ★ 재생 클릭 시점에 마이크 셋업 (사용자 제스처 보장)
+    _startSongMic();
+  }
+
+  async function _startSongMic() {
+    // 마이크 API 없는 브라우저
+    if (!navigator.mediaDevices?.getUserMedia) {
+      showMicError('browser'); return;
+    }
+
+    // AudioContext 먼저 생성 (사용자 제스처 직후라 가능)
+    try {
+      if (!audioContext || audioContext.state === 'closed') {
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+      }
+      if (audioContext.state === 'suspended') {
+        await audioContext.resume();
+      }
+    } catch(e) { console.warn('AudioContext:', e); }
+
+    // 마이크 스트림 요청
+    try {
+      if (!audioStream || audioStream.getTracks().every(t => t.readyState === 'ended')) {
+        audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      }
+      analyser  = audioContext.createAnalyser();
+      analyser.fftSize = 2048; analyser.smoothingTimeConstant = 0.82;
+      micSource = audioContext.createMediaStreamSource(audioStream);
+      micSource.connect(analyser);
+    } catch(err) {
+      // 마이크 실패해도 점수는 계산 (analyser 없이)
+      console.warn('마이크 오류:', err);
+    }
+
+    // 점수 계산 시작
     recActive  = true;
     startTime  = performance.now();
     progress   = 0; smplCnt = 0; volSum = 0; stabSum = 0;
@@ -2393,7 +2362,8 @@
     document.getElementById('floatProgress').style.display = 'block';
     document.getElementById('songExamples').style.display  = 'block';
 
-    analyzeAudio();
+    if (analyser) analyzeAudio();
+
     timer = setInterval(() => {
       const el = (performance.now() - startTime) / 1000;
       const st = getSecTime();
@@ -2403,7 +2373,6 @@
       const mm = Math.floor(el/60), ss = Math.floor(el%60);
       document.getElementById('floatTimer').textContent = mm + ':' + String(ss).padStart(2,'0');
       if (el >= st) {
-        // 시간 다 됐으면 노래도 정지
         const audio = document.getElementById('songAudio');
         try { audio.pause(); } catch {}
         finishRun();
