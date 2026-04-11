@@ -91,17 +91,6 @@
     .clap-hero-sub { font-size: 15px; opacity: .9; }
 
 
-    /* ── 건강박수 그리드 ── */
-    .clap-grid { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:8px; }
-    .clap-card { background:var(--surface); border:1.5px solid var(--border); border-radius:var(--r-lg); overflow:hidden; box-shadow:var(--sh-sm); }
-    .clap-img { width:100%; aspect-ratio:1/1; object-fit:cover; display:block; }
-    .clap-info { padding:12px 14px 14px; }
-    .clap-name { font-size:16px; font-weight:900; color:var(--text); margin-bottom:4px; }
-    .clap-effect { font-size:13px; color:var(--primary); font-weight:700; margin-bottom:4px; }
-    .clap-desc { font-size:13px; color:var(--text-sub); line-height:1.5; }
-    .clap-hero { background:linear-gradient(135deg,#FF6B35,#F4A227); border-radius:var(--r-xl); padding:24px; margin-bottom:20px; color:#fff; }
-    .clap-hero-title { font-size:24px; font-weight:900; margin-bottom:6px; }
-    .clap-hero-sub { font-size:15px; opacity:.9; line-height:1.6; }
 
     /* ── 헤더 ── */
     .app-header{
@@ -1148,7 +1137,6 @@
   <div class="tab-bar">
     <button class="tab active" onclick="switchTab('train',this)">🏋️ 도전</button>
     <button class="tab"        onclick="switchTab('record',this)">📊 기록</button>
-    <button class="tab"        onclick="switchTab('clap',this)">👏 박수</button>
     <button class="tab"        onclick="switchTab('clap',this)">👏 박수</button>
 
   </div>
@@ -2202,6 +2190,15 @@
         <div class="mode-desc-txt">${m.desc}</div>
       `;
       div.onclick = () => {
+        if (m.key === 'clap') {
+          // 박수탭으로 이동
+          document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+          document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
+          document.getElementById('page-clap').classList.add('active');
+          const tabs = document.querySelectorAll('.tab');
+          tabs.forEach(t => { if(t.textContent.includes('박수')) t.classList.add('active'); });
+          return;
+        }
         curMode = m;
         renderModes();
         document.getElementById('missionTxt').textContent = m.mission;
