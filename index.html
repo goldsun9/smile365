@@ -1149,6 +1149,16 @@
       <div class="clap-hero-title">7가지 건강 박수</div>
       <div class="clap-hero-sub">매일 박수로 온몸의 건강을 지켜요!<br>혈액순환·치매예방·소화력까지 한번에!</div>
     </div>
+
+    <!-- 박수치기 시작 버튼 -->
+    <div id="clapStartBtn" style="display:none; margin-bottom:16px;">
+      <button class="btn btn-primary" style="font-size:20px; padding:22px;" onclick="startClapMode()">
+        👏 박수치기 시작하기
+      </button>
+      <p style="text-align:center; font-size:14px; color:var(--text-sub); margin-top:10px;">
+        아래 박수 동작을 따라하며 도전해 보세요!
+      </p>
+    </div>
     <div class="clap-grid">
       <div class="clap-card">
         <img class="clap-img" src="data:image/png;base64,/9j/4AAQSkZJRgABAQAAAQABAAD/4gHYSUNDX1BST0ZJTEUAAQEAAAHIAAAAAAQwAABtbnRyUkdCIFhZWiAH4AABAAEAAAAAAABhY3NwAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAQAA9tYAAQAAAADTLQAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAlkZXNjAAAA8AAAACRyWFlaAAABFAAAABRnWFlaAAABKAAAABRiWFlaAAABPAAAABR3dHB0AAABUAAAABRyVFJDAAABZAAAAChnVFJDAAABZAAAAChiVFJDAAABZAAAAChjcHJ0AAABjAAAADxtbHVjAAAAAAAAAAEAAAAMZW5VUwAAAAgAAAAcAHMAUgBHAEJYWVogAAAAAAAAb6IAADj1AAADkFhZWiAAAAAAAABimQAAt4UAABjaWFlaIAAAAAAAACSgAAAPhAAAts9YWVogAAAAAAAA9tYAAQAAAADTLXBhcmEAAAAAAAQAAAACZmYAAPKnAAANWQAAE9AAAApbAAAAAAAAAABtbHVjAAAAAAAAAAEAAAAMZW5VUwAAACAAAAAcAEcAbwBvAGcAbABlACAASQBuAGMALgAgADIAMAAxADb/2wBDAAUDBAQEAwUEBAQFBQUGBwwIBwcHBw8LCwkMEQ8SEhEPERETFhwXExQaFRERGCEYGh0dHx8fExciJCIeJBweHx7/2wBDAQUFBQcGBw4ICA4eFBEUHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh4eHh7/wAARCACNAJoDASIAAhEBAxEB/8QAHAAAAQUBAQEAAAAAAAAAAAAAAwECBAUGBwgA/8QAPBAAAQMCBAQEBAQEBAcAAAAAAQIDEQAEBRIhMQZBUWETInGBBzKRoQgUI0JSscHRcoLh8BYXM0NiorL/xAAaAQACAwEBAAAAAAAAAAAAAAAAAQIEBQMG/8QAIhEAAgMAAgICAwEAAAAAAAAAAAECAxEEEiExBVEiMkFh/9oADAMBAAIRAxEAPwDhV02SnSBPQRUMpUggCZ+9WWUZjA5xvQbhpJQCkgEVbORDK1J5f+1OTdBMZSKjuoWmRyoKjrBB60tGThdxz21oZvRqSJPrpUJYWRpm7xzoZSoHoKAwlvPNrTEd5NV9yhBMACaIWV5cwCssx70nhKOgBPeosZWLaM0qGzzFWjFg888ltttS1KISlKRJJOwFeleHfw4YG7way7i2MXrOOOtZ1qaKSyys/sykSqNiZHaq910av2LNHGndvU8vtNHkJqShCgIj1r0R8OPw9Jvl3j3FWIOWzLLymmGrRQzPZf8AuFRBhPQRPpXN/irwP/wTxU9hCLg3VqUh23eUiCpJ/aeRUIgxSr5MJy6xZK3h21x7SRhUNGIoqGwnSNakBsDUc6eEAEHryIq0kVAKUazFHQ32jvT0JVtlKuelHbBJ2UIqSQmBbaAPWjpRA5ntTkpG9PCRuYjnQIRA1A071KBgRpUdGhEAEUTPGmo9qAGJJEKSQCPpQlyo6yAaMCUpCRB9poa5PmJ209KAIy0FQMmRtURbQToEgHqqp7xAkAkg9KAW9CVDQiKAIpSkQomelfLT5dRrRHkTqPrTRCdFFUUiQ1KAYJIncAUdtqR8szyigpUjSDA7Va4DaO4ri9phtm2t164dS2gJ31Op9hr7VGTxaOK7PDv/AMHfh3w9a8CWHGGI2f5rFn3Eu2wWo5GQFwmEjQnSZM7119vEbBNsW0KnQFOtUCizh+EMWLCQ2xbNpQ0gbIQkACsIp3FLzFHmsKt7m5eSkkIaElIJ58hXmbbpTk2et4dMItRR1PB721Lz4bAypWJE6SdTWQ/EEnBsV4Cv03OXxLRrx7Zf7kOSAAOxmCKw+G43jtpiz+CGzvEYgtwZWFNkOKkbgcxpvtU34g8L8Us8E4nf4s0260WFKUhDudaBuJERp2mlx5yU0W+dx4xrb3+HnrwxnBIgjpyr5IMx/PlTiqQSQY5U0EkERHrXqUeHY8KITlCvWjJSSBAOvKd6E2cqSkbE7d6Kk+Un/YpkWfAc9DpT9hM6naOdIBroPevlbb9qBCJhS407ClUogkQn6UqQMk661FN1BMISfc0ASYBAEaabU1YGpgZtxJgU5IVrMDTWN6RYImSANhpQAI+Vac0a7yPvQ1q0g5j76UTy9ACrURQ1CfSgCK6gFE6nTblQnAROkabGpShoFTz9KCtAUQCZExvSJEU+Zehiu8/hZ4ftixi3Ely2ouhQs7VSgIAIlxQ7/KPQmuH29m7dXTVtbtKW86sNtoTqVKJgAe5r2Fw9gaeEeCrDBE+Hmt7cBxQ/c6qVLUfVRI9AKzfkLesOq9svcKvtPt9ErFFMLwi5WVlQcR4QMapIOv3EU34dX9rh2CArCPzC31lyd1iYTJ5x/WgcTJUzhzFvqChAnoSRJ+81l8XuhZs2yEoPiNNgCNBO8nvJrEi8ZuVezfu4ph54gbfW2yq4SytCHCBmSkkEgHpUbiHixhwCyJCwASocojb32rkC8RuRirSi6fEVmG+4ipCn3vHQ4VElUAmnGTTL90Uo6cVvm1M3Dra28im3FIKJ2INDaOpkgCNzVnxg1+X4nxNtScqhcLIjlOv9aqZKBKTBjfrXqa3sUzxNiyTQ/WdtNNZoiFazJgbCo+eRqJnnT2iojcCN5roQJSfmkwZ6ilJ33r5tPl1BNLGvagiNMhOnPtvVG7epDqwQNFHnVvdqIbUkSORk7VjH3VF9wgDVR/nSYzZKeCM3lVHKDStlbs+aE7AfyoCV6DUE9En+lK2vUhMAn/y2piHqQNcilEzqT/akz5WylUKg8zpTlc9BHL0obmnzFMEUmNHy8oJzIgxOtN8JEykEfalUSR5lknrFW/A+FDG+LsKwiDku7pttf+CfN9gajJ9U2SiteHafgJ8ME2P5LjLHhNwsBzDrQj5JHldX3jVKfQnkK7NibJ8NLymmyyDLqlH6BI50y7X4QbU0nKE+VpI0A5D6ComKPvqwgtkkndI7DnXmrrJWz2Rv1VquOIzCrtzE+IVW6vFUyDmeSSC2ED93UE6D3rOcb5Biz9wgjK4ZIGwrT4ElTOF4m+sQblxLLYOmYp80D1kj2qt4YFovitq5vkJcYYbWshxMhKtkkg9CftVdx2RaqeM41dv4jc8b2Nha2r67t0KS03kKSqY1E8u9dKe4H4lw60GI4gq2cbTr4bSiSn+9b7ifFMMcXa4p4LQftl/puQCUg+VUHoQazvE3Fan81o0ZBbUJ71N56L823E4t8YMGDL1rjzZJRdEsvAbJWkaH3T9096wBUVJhII7zXbeMLFWJfD+/bTJeZQl9Ce6NT9pHvXDs/lEkAkTA51u8C3vXj/h5Lm19LN+wzYSFZgBljnSp01MRPsKRG8azRBEn93UVoFMlsqAEhcg7kiOVE66gdyNKAzGbTXX+KiuqypOxMbCmRK/EXSGl7E1lIJ11171e4s+EW6s2gMx3qqbaBbSeoFRZIviVBcDXsOdOKiUpKkgBKQkx/venPpWkZufLlSBAUCVGD0pkRzawVlPI6ananKIIMjSImo6w2kyDAPLpREFBSkNqEDUEkmkNC5gSQI6QBIPet58BGg58UsLKtfCQ84OxDao/nWGCR4kgRO8biu2fht4Scubq94rfSpLbB/K2wg+ZShK1egTA9VVX5MlGtneiLlYjtC7zxL5TTwORgZvUVKbCVMl5wAre0bT2qDd2wIABhT6spJ/hFGDqfzGREQ2nIgdK85L2b8fRnOM3bcWX5RhSQ0jQifm5knvOtVOGueDw+5d3Azru1QkrOrjadAQfWdedWt9hNvd8VWrd1nNmtyXhEAgCSJ7xULj+6Zdi3aQhKWhlbSgQEgcgOQrm3j06Q+jC47iT5tbhtSylBSEIE7awAKclJ8RB1UoQZNVXETrabzDLRZ87z+b0CRM/UirgkN6zmJFPS1Keol3CHzgV4Gh+ohtzIP8AKa87NyEiJAjlXpLC31JZDkD5hM7RXEOOMGGDcT3lqwoG3Lnisnq2vzJ+xj2rW+NktcTC+Si/DKRoQYmTFSB8sLgkCBrQ/FPhJahPhpJPlGpPc7+1OSSRA59RWyjJJTGg2kbe9DvXMqfKEyDsOlEb8qROpBmeXtVVjFx4TSyTGkxNGiKLG7ku3AYSfKD1qwaaIbSI5CqK0m4v0kz5lTWxQ2AgCRoOlJeQJD4zpMAGSIIH3oLqT+2ZnnUsGWoHl5DvQlNOGIHfQ0xEF0EmDlKiaElxSVgAFRPT+1WiLF64czlsMNgkhSp+wNTmU2lmnOwz+pEFa9Vf6UmMjYdZrBS9dpKAdEoUdVeo5CvYvwysG7H4bYFbtoShS7RLyynmpzzE/f7V46VcKduUEqME17M4EdXc8AYE+2JCsPZHpCQD/Ks75B/ii/wc7MjYzettOvPkKU2wPDSlI3VyqBgT7jtybhwfptgqPdXSrvGLEhv8nZtl19WvaT17VFTZs4dYi1UsKcT5l5TuaxpLwa8WLizzbGHPXEAOFGVE8p1P9K5did49eXEqRlUmRMzI6VvsYdF7ahpJgBIg9xpWFv7ZTS1k71xOsfBg7gm7+IYbJzptrUJHYqMn7RWsfZAIidqzmBWpc4sxF1YhWZHt5RWwuWvKPSpt+jp6GWWtmtIEka+orG/GXD2m8PwrFkpIdSpVq4R+5MFSD/8AQ9619qssOKIEiNqpfjM8w7wE0lCv1W7ptWnIHMI+9WeJLLUUuZHa2cfRbB3Vh4dSg6fenNtFtZCkKSAOY2NV1o+tvKUq227Va298op8xC0AQQT9xXo0zzwjileGSJjkdqy/E9wSfCnnW0yMXIUlIlSxKVjSsVjuE4gm7JQyq4QflU2CfqOVOQEXh9IFx4iv27VovzKjrmFVnD1ktKHDctLbgwUkQaufyzHJtUcvMKI+hMuGrFaUqXcnKBEoRqo+/KjJdDJS0hKWhlKiSeQ2+9IhY+ZIzGImouIqUp8kDKUsga/WmIZc3q3DBOw06VEU8szlJIPM0MyVSdOWtKOup9OVJjQgzJV4hMkAHSvUfwK40Y/5bs21y4F/knFsEH5gk+ZB+5HtXltxWkhXSa6j+HHErFXEzmBYmkKZv28rRUdA6mSn6iR9KqcyvvW8LPFmo2LTt2PccXjrRawq2LQKYU7l1PvWVRd4kpf5pVw4XNZKtQR0rdXbeGWTP5dXyp2RFZjE/DdUQykIbnQV59+Dej/hHTiQbtQnNpvvsaq7+8Lyda+uWMrkDQb1WYncN2jLjzziW2mklS1E6ADUmuTjr8E08KzBYOO4i4AAQ4kT/AJRWiWr9LUSazHCr7bzS7xKgpNy4XUqGxSdvtFahGUgQZmpSWEnLSMiYUDuqsL8Y3mmOHGkFf6j1ynKOyUkk/wAq3N04hhRcUYCQSa4X8UOIU4xi6WGHJt7YFKSP3KJ8x+wHtVzgwcrE/opc2ajU19mcZXOg+vap7DiQd4kR33qqZWBGkCjIdAP+tb6MJl43cHJ+nICFg1HeunmL5SmnCPNsKBbOJ8NzXdNNulBSioSSCJnSpaIvU3VriLGR79J4/wC9P7VAVhDWYzeXYM9qr2VlLgWSTG086ukX1rkTKlzGvlp6LAhfyhJEjWNTptTbi4W4+hR+RxMHXQHaoFx8xhapO1MaWFJKIlSfMnX7UxBLhwJV5hrPKhJdE6E/1pLlwLHiFPzDrzqG46AFDSOVJjJ2aRpyGhnaltcQdw67bubZ5SHWyFBQMEEGZHoRVQq8ymdJjQVGeuVLO89Kg/I/R6d4Y+J1jjuGIXijiBeoADgGmc/xD15irVzG2HElzxEBvqSBArythdzfsOeJaBRg66aVKxI4jfMhBcebCh5kqdKk/TlWbZ8epS2LNGvnuMcaO+4xxlw7ZpUX8ZtMw/Y24FqPsmTXKOPONH+IAqwsULZw8nz5vne9eg7fWsjZYem1QQiFKO6oqSGkg6+0V2p4EK32flnK3mzmsXgk8McX4twq7+WCE3VgTKWnCfJ/hVy9Nq6BhvxXwlSALy1uraf3JhxP1Gv2rnBYQ4MriApPQ00YXYyTkUB61O3hV2PWiNfLsgs013HnxGRiFkqwwbxEoXo48oQY6CualcnWrLFsPbZZ8a3USE/Mk9OoqpnpU66Y1LInO26Vr2QYOQNKclw86jzpXwPeK6HIuLZwFGU7uEJHoNTUhaiXFOIVpNVjDikjMdFRlSP4RUppUIye9S0QSQCNdqf4p/jV9KArtSlZn/qfajQJzp0g89hzoSnCj5FJB5kCmOKlRmhqOZRHIcpqTYBFkwp0SpkmFCPlPWq67UptUFQIOygdDUp91bYVlOidI61VvElRIMA6xUWwPiZq2wfB1XEPXMoaiUp5q/sKgYahBfC3E5wk/KdjWmtnvGSFZYO+804oTJaGGkNeGhACRoAnkaG42jdJVE6xSlUhMCJNNdUoOBIJ6VMQMtIGo07UFTQnQancCpBXpoKEtZCZEUABWpSBqBA02oDlwoLJOXoOlFV5lGq65JB0pMkHNwSCCfm371UXdulCytpQKSflHKiqWqVAHYTNAU4qJqLAD705OhB50wEzNLNQAOhxWaZmaOlw9ahpNHR0oAkhyTpoaQuGfmNBG1fSaegf/9k=" alt="감사박수">
@@ -1216,6 +1226,16 @@
       <div style="font-size:36px;margin-bottom:8px;">👏</div>
       <div class="clap-hero-title">7가지 건강 박수</div>
       <div class="clap-hero-sub">매일 박수로 온몸의 건강을 지켜요!<br>혈액순환·치매예방·소화력까지 한번에!</div>
+    </div>
+
+    <!-- 박수치기 시작 버튼 -->
+    <div id="clapStartBtn" style="display:none; margin-bottom:16px;">
+      <button class="btn btn-primary" style="font-size:20px; padding:22px;" onclick="startClapMode()">
+        👏 박수치기 시작하기
+      </button>
+      <p style="text-align:center; font-size:14px; color:var(--text-sub); margin-top:10px;">
+        아래 박수 동작을 따라하며 도전해 보세요!
+      </p>
     </div>
     <div class="clap-grid">
       <div class="clap-card">
@@ -2191,12 +2211,18 @@
       `;
       div.onclick = () => {
         if (m.key === 'clap') {
+          // curMode 설정 (점수 계산용)
+          curMode = m;
+          renderModes();
+          renderMission();
           // 박수탭으로 이동
           document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
           document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
           document.getElementById('page-clap').classList.add('active');
           const tabs = document.querySelectorAll('.tab');
           tabs.forEach(t => { if(t.textContent.includes('박수')) t.classList.add('active'); });
+          // 시작 버튼 보이기
+          document.getElementById('clapStartBtn').style.display = 'block';
           return;
         }
         curMode = m;
@@ -3285,6 +3311,17 @@
       btn.disabled = false;
       msg.style.display = 'none';
     }
+  }
+
+  function startClapMode() {
+    // 도전탭으로 이동 후 startRun() 실행
+    document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+    document.querySelectorAll('.tab-page').forEach(p => p.classList.remove('active'));
+    document.getElementById('page-train').classList.add('active');
+    const tabs = document.querySelectorAll('.tab');
+    tabs.forEach(t => { if(t.textContent.includes('도전')) t.classList.add('active'); });
+    // 잠깐 후 startRun 실행
+    setTimeout(() => startRun(), 100);
   }
 
   function openYoutube() {
