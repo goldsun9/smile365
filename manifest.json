@@ -1,7 +1,7 @@
 {
   "name": "뇌웃음365",
   "short_name": "뇌웃음365",
-  "description": "매일 5분 두뇌를 깨우는 치매예방 트레이닝 | Lively Brain 365",
+  "description": "매일 5분 두뇌를 깨우는 치매예방 트레이닝 | Brain Smile 365",
   "start_url": "/index.html",
   "scope": "/",
   "display": "standalone",
