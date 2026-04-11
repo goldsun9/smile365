@@ -1,5 +1,5 @@
 /* =====================================================
-   뇌활력365 — Service Worker v2.2.0
+   뇌웃음365 — Service Worker v2.2.0
    ===================================================== */
 
 const CACHE_NAME = 'smile365-v2.2.0';
@@ -47,8 +47,8 @@ self.addEventListener('fetch', event => {
 
 self.addEventListener('push', event => {
   const data = event.data ? event.data.json() : {};
-  event.waitUntil(self.registration.showNotification(data.title || '뇌활력365', {
-    body: data.body || '오늘의 뇌활력 훈련이 기다리고 있어요! 😄',
+  event.waitUntil(self.registration.showNotification(data.title || '뇌웃음365', {
+    body: data.body || '오늘의 뇌웃음 훈련이 기다리고 있어요! 😄',
     icon: '/Icons/icon-192x192.png',
     badge: '/Icons/icon-72x72.png',
     vibrate: [100, 50, 100],
