@@ -1131,6 +1131,12 @@
       background:linear-gradient(135deg,#fdf9ff,#f7f0ff);
       box-shadow:0 2px 12px rgba(108,52,131,.08);
       position:relative; overflow:hidden;
+      cursor:pointer; transition:transform .15s ease, box-shadow .15s ease;
+    }
+    .tn-note-item:active { transform:scale(.98); box-shadow:0 1px 6px rgba(108,52,131,.12); }
+    .tn-note-tap-hint {
+      font-size:11px; color:#b88dd6; margin-top:8px;
+      display:flex; align-items:center; gap:4px;
     }
     .tn-note-item::before {
       content:''; position:absolute;
@@ -1171,6 +1177,79 @@
     }
     .tn-stat-num { font-size:28px; font-weight:900; color:#6c3483; }
     .tn-stat-lbl { font-size:12px; color:#9b59b6; margin-top:2px; }
+
+    /* ── 감사노트 상세보기 모달 ── */
+    .tn-detail-modal {
+      display:none; position:fixed;
+      top:0; left:0; right:0; bottom:0;
+      background:rgba(45,27,94,.75);
+      z-index:10000;
+      align-items:center; justify-content:center;
+      padding:20px;
+      animation:fadeIn .25s ease;
+    }
+    .tn-detail-modal.show { display:flex; }
+    .tn-detail-card {
+      background:linear-gradient(135deg,#9b59b6,#6c3483);
+      border-radius:24px;
+      padding:28px 24px;
+      max-width:480px; width:100%;
+      max-height:85vh; overflow-y:auto;
+      color:#fff;
+      box-shadow:0 20px 60px rgba(45,27,94,.5);
+      animation:slideUp .35s ease;
+    }
+    .tn-detail-close {
+      position:absolute; top:16px; right:16px;
+      background:rgba(255,255,255,.2); border:none;
+      width:36px; height:36px; border-radius:50%;
+      color:#fff; font-size:18px; cursor:pointer;
+    }
+    .tn-detail-header {
+      display:flex; align-items:center; justify-content:space-between;
+      margin-bottom:20px; gap:12px;
+    }
+    .tn-detail-date {
+      font-size:14px; opacity:.9; font-weight:700;
+    }
+    .tn-detail-day {
+      background:rgba(255,255,255,.25);
+      border-radius:99px; padding:5px 14px;
+      font-size:13px; font-weight:900;
+    }
+    .tn-detail-quote-mark {
+      font-size:60px; line-height:1; opacity:.4; margin-bottom:-10px;
+    }
+    .tn-detail-text {
+      font-size:22px; line-height:1.7; font-weight:500;
+      margin-bottom:24px; padding:0 4px;
+      word-break:keep-all;
+    }
+    .tn-detail-footer {
+      font-size:13px; opacity:.85; text-align:center;
+      margin-bottom:20px; padding-top:16px;
+      border-top:1px solid rgba(255,255,255,.2);
+    }
+    .tn-detail-btns {
+      display:grid; gap:10px;
+    }
+    .tn-detail-btn {
+      padding:16px; border-radius:14px;
+      font-size:16px; font-weight:900;
+      cursor:pointer; font-family:inherit;
+      border:none; display:flex;
+      align-items:center; justify-content:center; gap:10px;
+      transition:transform .15s ease;
+    }
+    .tn-detail-btn:active { transform:scale(.97); }
+    .tn-detail-btn-kakao {
+      background:#FAE100; color:#3B1E08;
+    }
+    .tn-detail-btn-other {
+      background:rgba(255,255,255,.2);
+      color:#fff;
+      border:1.5px solid rgba(255,255,255,.4);
+    }
 
     /* ── 반응형 ── */
     @media(max-width:480px){
@@ -1777,6 +1856,32 @@
     <div class="insight-box" id="insightBox">
       <div class="insight-lbl">🤖 AI 분석 리포트</div>
       <div class="insight-txt" id="insightTxt">아직 분석할 기록이 없습니다. 도전을 시작해 보세요!</div>
+    </div>
+
+    <!-- 오늘 기록 가족에게 카카오톡으로 보내기 -->
+    <div style="
+      background: linear-gradient(135deg, #FAE100, #FFD000);
+      border-radius: 18px;
+      padding: 18px 20px;
+      margin: 14px 0;
+      box-shadow: 0 4px 16px rgba(250,225,0,.3);
+    ">
+      <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
+        <div style="font-size:32px;">💛</div>
+        <div>
+          <div style="font-size:16px; font-weight:900; color:#3B1E08;">오늘의 기록을 가족에게!</div>
+          <div style="font-size:13px; color:#5b3e15; margin-top:2px;">점수 · 미션 · 감사노트를 한 번에 공유해요</div>
+        </div>
+      </div>
+      <button onclick="shareTodayRecord()" style="
+        width:100%; background:#3B1E08; color:#FAE100;
+        border:none; border-radius:12px; padding:16px;
+        font-size:16px; font-weight:900; cursor:pointer;
+        font-family:inherit; display:flex;
+        align-items:center; justify-content:center; gap:10px;
+      ">
+        💬 카카오톡으로 보내기
+      </button>
     </div>
 
     <!-- 모드별 최고점 -->
@@ -2635,8 +2740,10 @@
     document.getElementById('scoreGrade').textContent  = grd;
     document.getElementById('scoreRhythm').textContent = rs;
     const mm2=Math.floor(el/60), ss2=Math.floor(el%60); document.getElementById('scoreTime').textContent = mm2>0 ? mm2+'분 '+ss2+'초' : el.toFixed(1)+'초';
-    // 점수 카드로 스크롤
-    sr.scrollIntoView({ behavior:'smooth', block:'center' });
+    // 점수 카드로 스크롤 — 단, 박수 모드는 별도 모달이 뜨므로 스크롤 생략
+    if (curMode.key !== 'clap') {
+      sr.scrollIntoView({ behavior:'smooth', block:'center' });
+    }
     addHistory(curMode.key, fs, rs, el.toFixed(1)+'초', 'live');
     // 오늘의 미션 카운트 업데이트
     addMissionCount(curMode.key, clapCount);
@@ -3258,14 +3365,16 @@
           const d = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
           dayStr = days[d.getDay()] + '요일';
         } catch {}
+        const safeKey = k.replace(/'/g,"\\'");
         return `
-        <div class="tn-note-item" id="tn-item-${encodeURIComponent(k)}">
-          <button class="tn-note-del" onclick="deleteThanksNote('${k.replace(/'/g,"\'")}')">🗑️</button>
+        <div class="tn-note-item" id="tn-item-${encodeURIComponent(k)}" onclick="openThanksDetail('${safeKey}')">
+          <button class="tn-note-del" onclick="event.stopPropagation(); deleteThanksNote('${safeKey}')">🗑️</button>
           <div class="tn-note-date">
             <span class="tn-note-day-badge">${dayStr}</span>
             🗓️ ${k}
           </div>
           <div class="tn-note-text">${notes[k]}</div>
+          <div class="tn-note-tap-hint">👆 탭하면 크게 보기 · 카카오 공유</div>
         </div>`;
       }).join('');
     }
@@ -3284,6 +3393,127 @@
     delete notes[key];
     saveThanksNotes(notes);
     openThanksNoteList(); // 새로고침
+  }
+
+  // ── 감사노트 상세보기 ──
+  let currentDetailKey = null;
+  function openThanksDetail(key) {
+    const notes = loadThanksNotes();
+    if (!notes[key]) return;
+    currentDetailKey = key;
+    // 요일 계산
+    const days = ['일','월','화','수','목','금','토'];
+    const parts = key.replace(/\./g,'').trim().split(/\s+/);
+    let dayStr = '';
+    try {
+      const d = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
+      dayStr = days[d.getDay()] + '요일';
+    } catch {}
+    document.getElementById('tnDetailDate').textContent = '🗓️ ' + key;
+    document.getElementById('tnDetailDay').textContent = dayStr;
+    document.getElementById('tnDetailText').textContent = notes[key];
+    document.getElementById('thanksDetailModal').classList.add('show');
+  }
+
+  function closeThanksDetail(e) {
+    if (e && e.target.id !== 'thanksDetailModal') return;
+    document.getElementById('thanksDetailModal').classList.remove('show');
+    currentDetailKey = null;
+  }
+
+  // ── 감사노트 카카오/다른 앱 공유 ──
+  function shareThanksDetail(method) {
+    if (!currentDetailKey) return;
+    const notes = loadThanksNotes();
+    const text = notes[currentDetailKey];
+    if (!text) return;
+    // 요일 계산
+    const days = ['일','월','화','수','목','금','토'];
+    const parts = currentDetailKey.replace(/\./g,'').trim().split(/\s+/);
+    let dayStr = '';
+    try {
+      const d = new Date(parseInt(parts[0]), parseInt(parts[1])-1, parseInt(parts[2]));
+      dayStr = days[d.getDay()] + '요일';
+    } catch {}
+    const shareText =
+`💜 오늘의 감사 한 마디
+
+🗓️ ${currentDetailKey} ${dayStr}
+
+"${text}"
+
+— 뇌웃음365 감사노트에서
+가족에게 사랑을 담아 보냅니다 💛`;
+
+    if (method === 'kakao' || method === 'other') {
+      if (navigator.share) {
+        navigator.share({
+          title: '💜 오늘의 감사 — 뇌웃음365',
+          text: shareText
+        }).catch(() => fallbackCopy(shareText));
+      } else {
+        fallbackCopy(shareText);
+      }
+    }
+  }
+
+  // ── 그날(오늘)의 나의 기록 공유 ──
+  function shareTodayRecord() {
+    const todayStr = new Date().toLocaleDateString('ko-KR');
+    const items = loadHistory().filter(it => it.date === todayStr);
+    const m = loadMission();
+    const notes = loadThanksNotes();
+    const todayThanks = notes[todayStr] || '';
+
+    // 요일 계산
+    const days = ['일','월','화','수','목','금','토'];
+    const dayStr = days[new Date().getDay()] + '요일';
+
+    let text = `😊 오늘 나의 뇌건강 기록\n\n🗓️ ${todayStr} ${dayStr}\n`;
+    text += `🔥 연속 ${getStreak()}일째 도전 중!\n\n`;
+
+    // 도전 기록 (오늘 한 것만)
+    if (items.length > 0) {
+      const scores = items.map(i => i.score);
+      const best = Math.max(...scores);
+      const avg = Math.round(scores.reduce((a,b)=>a+b,0)/scores.length);
+      text += `📊 오늘의 도전 결과\n`;
+      text += `▫️ 도전 횟수: ${items.length}회\n`;
+      text += `▫️ 최고 점수: ${best}점\n`;
+      text += `▫️ 평균 점수: ${avg}점\n\n`;
+
+      // 가장 좋았던 도전
+      const bestItem = items.find(i => i.score === best);
+      if (bestItem) {
+        text += `🏆 베스트: ${bestItem.modeEmoji} ${bestItem.modeName} (${best}점)\n\n`;
+      }
+    } else {
+      text += `📊 오늘은 아직 도전 기록이 없어요.\n도전 모드에서 시작해 보세요! 💪\n\n`;
+    }
+
+    // 오늘의 미션 진행
+    text += `🎯 오늘의 미션 진행\n`;
+    text += `${m.laugh >= MISSION_GOALS.laugh ? '✅' : '⬜'} 소리내서 웃기  ${m.laugh}/${MISSION_GOALS.laugh}번\n`;
+    text += `${m.pronounce >= MISSION_GOALS.pronounce ? '✅' : '⬜'} 발음 따라하기  ${m.pronounce}/${MISSION_GOALS.pronounce}번\n`;
+    text += `${m.song >= MISSION_GOALS.song ? '✅' : '⬜'} 노래 따라하기  ${m.song}/${MISSION_GOALS.song}번\n`;
+    text += `${m.clap >= MISSION_GOALS.clap ? '✅' : '⬜'} 건강박수 치기  ${m.clap}/${MISSION_GOALS.clap}번\n`;
+    text += `${m.thanks >= MISSION_GOALS.thanks ? '✅' : '⬜'} 오늘의 감사하기 ${m.thanks >= MISSION_GOALS.thanks ? '완료 🙏' : ''}\n\n`;
+
+    // 오늘의 감사
+    if (todayThanks) {
+      text += `💜 오늘의 감사\n"${todayThanks}"\n\n`;
+    }
+
+    text += `웃음·박수·노래·발성·감사는\n치매 예방의 가장 좋은 영양제입니다 💪\n\n— 뇌웃음365`;
+
+    if (navigator.share) {
+      navigator.share({
+        title: '😊 오늘 나의 뇌건강 기록 — 뇌웃음365',
+        text: text
+      }).catch(() => fallbackCopy(text));
+    } else {
+      fallbackCopy(text);
+    }
   }
 
   // ── 감사하기 버튼 상태 업데이트 ──
@@ -3319,11 +3549,8 @@
     // 하단바 상태 전환: 시작버튼 숨기고 녹음중 표시
     document.getElementById('clapBarReady').style.display = 'none';
     document.getElementById('clapBarRecording').style.display = 'block';
-    // 하단 녹음바가 보이도록 아래로 스크롤
-    setTimeout(() => {
-      document.getElementById('clapBottomBar').scrollIntoView({behavior:'smooth', block:'end'});
-      window.scrollTo({top: document.body.scrollHeight, behavior:'smooth'});
-    }, 300);
+    // ※ 하단 녹음바는 position:fixed라 자동으로 화면 하단에 보이므로 스크롤 불필요
+    //   사용자가 보던 위치(4개 카드 중 위 2개)가 그대로 유지됨
     // 타이머 업데이트
     let elapsed = 0;
     const totalSec = 60;
@@ -3358,8 +3585,10 @@
     const elapsedSec = Math.min(getSecTime(), (performance.now()-startTime)/1000);
     const totalClaps = clapCount;
     stopRun();
-    // 박수치기 점수 모달 표시
+    // 박수치기가 실제로 진행되었을 때만 점수 모달 표시
     if (wasActive) {
+      // 페이지를 맨 위로 올리고 점수 모달 즉시 띄우기
+      window.scrollTo({top:0, behavior:'smooth'});
       showClapScoreModal(elapsedSec, totalClaps);
     }
   }
@@ -3509,6 +3738,31 @@
     <div class="tn-stats-bar" id="tnStatsBar" style="margin-top:16px;"></div>
     <!-- 노트 목록 -->
     <div id="tnNoteList"></div>
+  </div>
+</div>
+
+<!-- ────────── 감사노트 상세보기 모달 ────────── -->
+<div class="tn-detail-modal" id="thanksDetailModal" onclick="closeThanksDetail(event)">
+  <div class="tn-detail-card" onclick="event.stopPropagation();" style="position:relative;">
+    <button class="tn-detail-close" onclick="closeThanksDetail()">✕</button>
+    <div style="text-align:center; font-size:48px; margin-bottom:12px;">🙏</div>
+    <div class="tn-detail-header">
+      <div class="tn-detail-date" id="tnDetailDate">2025. 01. 01.</div>
+      <div class="tn-detail-day" id="tnDetailDay">월요일</div>
+    </div>
+    <div class="tn-detail-quote-mark">"</div>
+    <div class="tn-detail-text" id="tnDetailText">감사 내용</div>
+    <div class="tn-detail-footer">
+      💜 <strong>뇌웃음365</strong>에서 기록한 감사노트
+    </div>
+    <div class="tn-detail-btns">
+      <button class="tn-detail-btn tn-detail-btn-kakao" onclick="shareThanksDetail('kakao')">
+        💛 카카오톡으로 가족에게 보내기
+      </button>
+      <button class="tn-detail-btn tn-detail-btn-other" onclick="shareThanksDetail('other')">
+        📤 다른 앱으로 공유하기
+      </button>
+    </div>
   </div>
 </div>
 
