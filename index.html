@@ -1758,11 +1758,31 @@
               <div id="songSubtitleText" style="font-size:14px; color:var(--text-muted);">뇌웃음365 · Goldsun9</div>
             </div>
           </div>
-          <audio id="songAudio" controls style="width:100%; height:52px; border-radius:10px; outline:none;" preload="auto"
-            onplay="onSongPlay()" onpause="onSongPause()" onended="onSongEnded()">
+          <!-- 🎵 커스텀 시니어 플레이어 -->
+          <audio id="songAudio" preload="auto"
+            onplay="onSongPlay()" onpause="onSongPause()" onended="onSongEnded()"
+            ontimeupdate="onSongTimeUpdate()" onloadedmetadata="onSongTimeUpdate()">
             브라우저가 오디오를 지원하지 않습니다.
           </audio>
-          <div id="songPlayHint" style="font-size:13px; color:var(--text-muted); margin-top:8px; text-align:center;">
+
+          <!-- 대형 재생 버튼 -->
+          <button class="mega-play-btn" id="megaPlayBtn" onclick="toggleSongPlay()">
+            <span class="mega-play-icon" id="megaPlayIcon">▶</span>
+            <span class="mega-play-label" id="megaPlayLabel">재생하기</span>
+          </button>
+
+          <!-- 시간 표시 -->
+          <div class="song-time-display" id="songTimeDisplay">0:00 / 0:00</div>
+
+          <!-- 볼륨 3단계 버튼 -->
+          <div class="song-volume-label">🔊 소리 크기</div>
+          <div class="song-volume-btns">
+            <button class="vol-btn" data-vol="0.5" onclick="setSongVolume(0.5, this)">🔉 작게</button>
+            <button class="vol-btn active" data-vol="1.0" onclick="setSongVolume(1.0, this)">🔊 중간</button>
+            <button class="vol-btn" data-vol="2.0" onclick="setSongVolume(2.0, this)">📢 크게</button>
+          </div>
+
+          <div id="songPlayHint" style="font-size:13px; color:var(--text-muted); margin-top:12px; text-align:center;">
             ⬇️ 먼저 아래로 스크롤해서 녹음 버튼을 눌러주세요
           </div>
         </div>
@@ -2072,6 +2092,83 @@
     .auth-blocked-title { font-size:18px; font-weight:900; color:#dc2626; margin-bottom:6px; }
     .auth-blocked-desc { font-size:14px; color:#7f1d1d; line-height:1.5; }
     .auth-blocked-timer { font-size:20px; font-weight:900; color:#dc2626; margin-top:10px; }
+
+  
+    /* ══════════════════════════════════════════
+       🎵 커스텀 시니어 플레이어
+       ══════════════════════════════════════════ */
+    /* 오디오 엘리먼트 숨김 (컨트롤은 커스텀 UI로) */
+    #songAudio { display:none; }
+
+    /* 대형 재생 버튼 */
+    .mega-play-btn {
+      width:100%; padding:26px 20px;
+      background:linear-gradient(135deg,#e91e8c,#ff6b9d);
+      color:#fff; border:none; border-radius:20px;
+      font-size:26px; font-weight:900;
+      font-family:inherit; letter-spacing:-0.3px;
+      cursor:pointer; display:flex;
+      align-items:center; justify-content:center;
+      gap:14px; margin-bottom:14px;
+      box-shadow:0 8px 24px rgba(233,30,140,.35);
+      transition:all .2s;
+    }
+    .mega-play-btn:active {
+      transform:scale(.97);
+      box-shadow:0 4px 14px rgba(233,30,140,.35);
+    }
+    .mega-play-btn.playing {
+      background:linear-gradient(135deg,#2EAA6B,#27ae60);
+      box-shadow:0 8px 24px rgba(46,170,107,.35);
+    }
+    .mega-play-icon {
+      font-size:32px; line-height:1;
+      display:inline-block; min-width:34px;
+    }
+    .mega-play-label {
+      font-size:22px; font-weight:900;
+    }
+
+    /* 시간 표시 */
+    .song-time-display {
+      text-align:center;
+      font-size:22px; font-weight:900;
+      color:#c0357a;
+      letter-spacing:1px;
+      font-family:'Courier New',monospace;
+      margin-bottom:18px;
+      padding:8px;
+    }
+
+    /* 볼륨 섹션 */
+    .song-volume-label {
+      font-size:15px; font-weight:800;
+      color:#555; margin-bottom:10px;
+      text-align:center;
+    }
+    .song-volume-btns {
+      display:grid;
+      grid-template-columns:1fr 1fr 1fr;
+      gap:8px;
+      margin-bottom:4px;
+    }
+    .vol-btn {
+      padding:14px 8px;
+      background:#fff;
+      border:2px solid #f9d0e8;
+      border-radius:12px;
+      font-size:15px; font-weight:800;
+      color:#666;
+      cursor:pointer; font-family:inherit;
+      transition:all .15s;
+      letter-spacing:-0.3px;
+    }
+    .vol-btn:active { transform:scale(.96); }
+    .vol-btn.active {
+      background:linear-gradient(135deg,#e91e8c,#ff6b9d);
+      color:#fff; border-color:transparent;
+      box-shadow:0 4px 12px rgba(233,30,140,.3);
+    }
 
   </style>
 
@@ -3498,7 +3595,7 @@
     const days = ['일','월','화','수','목','금','토'];
     const dayStr = days[new Date().getDay()] + '요일';
 
-    let text = `😊 오늘 나의 뇌건강 기록\n\n🗓️ ${todayStr} ${dayStr}\n`;
+    let text = `🗓️ ${todayStr} ${dayStr}\n`;
     text += `🔥 연속 ${getStreak()}일째 도전 중!\n\n`;
 
     // 도전 기록 (오늘 한 것만)
@@ -4158,6 +4255,133 @@
   } else {
     checkAuthOnLoad();
   }
+
+
+</script>
+
+<script>
+
+  /* ══════════════════════════════════════════
+     🎵 커스텀 시니어 플레이어 (볼륨 부스터 포함)
+     ══════════════════════════════════════════ */
+
+  let songGainNode = null;    // Web Audio API 게인 노드 (볼륨 부스터용)
+  let songAudioCtx = null;    // Web Audio API 컨텍스트
+  let songSourceNode = null;  // 오디오 소스 노드
+  let songVolumeLevel = 1.0;  // 현재 볼륨 (0.5 / 1.0 / 2.0)
+
+  // 시간 포맷 (초 → 0:08 형식)
+  function formatSongTime(sec) {
+    if (!sec || isNaN(sec)) return '0:00';
+    const m = Math.floor(sec / 60);
+    const s = Math.floor(sec % 60);
+    return m + ':' + String(s).padStart(2, '0');
+  }
+
+  // 재생/정지 토글
+  function toggleSongPlay() {
+    const audio = document.getElementById('songAudio');
+    if (!audio.src || audio.src === window.location.href) {
+      // 아직 곡이 로드되지 않았으면 기본 곡 로드
+      if (typeof selectSong === 'function' && typeof currentSongId !== 'undefined') {
+        selectSong(currentSongId);
+        setTimeout(() => { try { audio.play(); } catch {} }, 200);
+      }
+      return;
+    }
+    if (audio.paused) {
+      try { audio.play(); } catch(e) { console.warn('재생 실패:', e); }
+    } else {
+      try { audio.pause(); } catch {}
+    }
+  }
+
+  // 재생 상태 UI 갱신
+  function updateMegaPlayUI() {
+    const audio = document.getElementById('songAudio');
+    const btn = document.getElementById('megaPlayBtn');
+    const icon = document.getElementById('megaPlayIcon');
+    const label = document.getElementById('megaPlayLabel');
+    if (!btn || !icon || !label) return;
+    if (audio.paused) {
+      btn.classList.remove('playing');
+      icon.textContent = '▶';
+      label.textContent = '재생하기';
+    } else {
+      btn.classList.add('playing');
+      icon.textContent = '⏸';
+      label.textContent = '일시정지';
+    }
+  }
+
+  // 시간 업데이트 (재생 중 + 로드 시)
+  function onSongTimeUpdate() {
+    const audio = document.getElementById('songAudio');
+    const display = document.getElementById('songTimeDisplay');
+    if (!display) return;
+    const cur = formatSongTime(audio.currentTime || 0);
+    const dur = formatSongTime(audio.duration || 0);
+    display.textContent = cur + ' / ' + dur;
+    updateMegaPlayUI();
+  }
+
+  // 볼륨 설정 (최대 200%까지 - Web Audio API로 부스트)
+  function setSongVolume(level, btn) {
+    songVolumeLevel = level;
+
+    // 모든 볼륨 버튼 active 해제 후 현재 버튼만 활성
+    document.querySelectorAll('.vol-btn').forEach(b => b.classList.remove('active'));
+    if (btn) btn.classList.add('active');
+
+    const audio = document.getElementById('songAudio');
+    if (!audio) return;
+
+    // 100% 이하면 기본 audio.volume 사용
+    if (level <= 1.0) {
+      audio.volume = level;
+      // 부스터를 쓰고 있었으면 gain도 1로 리셋
+      if (songGainNode) songGainNode.gain.value = 1.0;
+      return;
+    }
+
+    // 100% 초과면 Web Audio API로 증폭
+    audio.volume = 1.0;
+    try {
+      if (!songAudioCtx) {
+        songAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        songSourceNode = songAudioCtx.createMediaElementSource(audio);
+        songGainNode = songAudioCtx.createGain();
+        songSourceNode.connect(songGainNode);
+        songGainNode.connect(songAudioCtx.destination);
+      }
+      if (songAudioCtx.state === 'suspended') {
+        songAudioCtx.resume();
+      }
+      songGainNode.gain.value = level; // 2.0 = 200%
+    } catch(e) {
+      console.warn('볼륨 부스터 오류:', e);
+    }
+  }
+
+  // 곡 변경 시 시간 표시도 초기화 (selectSong과 연동)
+  (function(){
+    const origSelect = window.selectSong;
+    if (typeof origSelect === 'function') {
+      window.selectSong = function(id) {
+        origSelect(id);
+        setTimeout(() => {
+          const d = document.getElementById('songTimeDisplay');
+          if (d) d.textContent = '0:00 / 0:00';
+          updateMegaPlayUI();
+        }, 100);
+      };
+    }
+  })();
+
+  // 페이지 로드 시 초기 UI 세팅
+  document.addEventListener('DOMContentLoaded', function() {
+    setTimeout(updateMegaPlayUI, 200);
+  });
 
 
 </script>
