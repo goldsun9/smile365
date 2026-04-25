@@ -1774,12 +1774,12 @@
           <!-- 시간 표시 -->
           <div class="song-time-display" id="songTimeDisplay">0:00 / 0:00</div>
 
-          <!-- 볼륨 3단계 버튼 -->
+          <!-- 볼륨 3단계 버튼 (휴대폰/PC 시스템 볼륨도 함께 조절하세요!) -->
           <div class="song-volume-label">🔊 소리 크기</div>
           <div class="song-volume-btns">
-            <button class="vol-btn" data-vol="0.5" onclick="setSongVolume(0.5, this)">🔉 작게</button>
-            <button class="vol-btn active" data-vol="1.0" onclick="setSongVolume(1.0, this)">🔊 중간</button>
-            <button class="vol-btn" data-vol="2.0" onclick="setSongVolume(2.0, this)">📢 크게</button>
+            <button class="vol-btn" data-vol="0.3" onclick="setSongVolume(0.3, this)">🔉 작게</button>
+            <button class="vol-btn" data-vol="0.6" onclick="setSongVolume(0.6, this)">🔊 중간</button>
+            <button class="vol-btn active" data-vol="1.0" onclick="setSongVolume(1.0, this)">📢 크게</button>
           </div>
 
           <div id="songPlayHint" style="font-size:13px; color:var(--text-muted); margin-top:12px; text-align:center;">
@@ -4265,10 +4265,7 @@
      🎵 커스텀 시니어 플레이어 (볼륨 부스터 포함)
      ══════════════════════════════════════════ */
 
-  let songGainNode = null;    // Web Audio API 게인 노드 (볼륨 부스터용)
-  let songAudioCtx = null;    // Web Audio API 컨텍스트
-  let songSourceNode = null;  // 오디오 소스 노드
-  let songVolumeLevel = 1.0;  // 현재 볼륨 (0.5 / 1.0 / 2.0)
+  let songVolumeLevel = 1.0;  // 현재 볼륨 (기본 100% - 최대)
 
   // 시간 포맷 (초 → 0:08 형식)
   function formatSongTime(sec) {
@@ -4325,7 +4322,7 @@
     updateMegaPlayUI();
   }
 
-  // 볼륨 설정 (최대 200%까지 - Web Audio API로 부스트)
+  // 볼륨 설정 (단순화: audio.volume만 사용 - 음질/음량 보존)
   function setSongVolume(level, btn) {
     songVolumeLevel = level;
 
@@ -4336,30 +4333,12 @@
     const audio = document.getElementById('songAudio');
     if (!audio) return;
 
-    // 100% 이하면 기본 audio.volume 사용
-    if (level <= 1.0) {
-      audio.volume = level;
-      // 부스터를 쓰고 있었으면 gain도 1로 리셋
-      if (songGainNode) songGainNode.gain.value = 1.0;
-      return;
-    }
-
-    // 100% 초과면 Web Audio API로 증폭
-    audio.volume = 1.0;
-    try {
-      if (!songAudioCtx) {
-        songAudioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        songSourceNode = songAudioCtx.createMediaElementSource(audio);
-        songGainNode = songAudioCtx.createGain();
-        songSourceNode.connect(songGainNode);
-        songGainNode.connect(songAudioCtx.destination);
-      }
-      if (songAudioCtx.state === 'suspended') {
-        songAudioCtx.resume();
-      }
-      songGainNode.gain.value = level; // 2.0 = 200%
-    } catch(e) {
-      console.warn('볼륨 부스터 오류:', e);
+    // audio.volume 은 0.0 ~ 1.0 만 지원
+    // "크게" 버튼(level=2.0)은 100%로 처리 (Web Audio API 사용 안 함 - 원본 소리 보존)
+    if (level >= 1.0) {
+      audio.volume = 1.0;  // 최대
+    } else {
+      audio.volume = level;  // 0.5 = 50%
     }
   }
 
