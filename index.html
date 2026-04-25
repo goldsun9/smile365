@@ -1748,14 +1748,12 @@
 
       <!-- ③ 음악 플레이어 -->
       <div class="card" id="songPlayerCard" style="border-left:4px solid #e91e8c; background:linear-gradient(135deg,#fff8fc,#fff0f8);">
-        <div class="card-title" id="songCardTitle" style="font-size:19px;">🎵 웃음 발음 체조송</div>
         <div class="card-sub">노래를 들으며 가사를 따라 불러보세요!</div>
         <div style="background:#fff; border:1.5px solid #f9d0e8; border-radius:var(--r-md); padding:16px; margin-bottom:4px;">
           <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
             <div id="songIconBox" style="width:48px; height:48px; background:linear-gradient(135deg,#e91e8c,#ff6b9d); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0;"><span id="songIconEmoji">🎵</span></div>
             <div>
-              <div id="songTitleText" style="font-size:17px; font-weight:900; color:var(--text);">웃음 발음 체조송</div>
-              <div id="songSubtitleText" style="font-size:14px; color:var(--text-muted);">뇌웃음365 · Goldsun9</div>
+              <div id="songTitleText" style="font-size:18px; font-weight:900; color:var(--text);">웃음 발음 체조송</div>
             </div>
           </div>
           <!-- 🎵 커스텀 시니어 플레이어 -->
@@ -2246,12 +2244,8 @@
     document.querySelectorAll('.song-tab').forEach(tab => {
       tab.classList.toggle('active', tab.dataset.songId === id);
     });
-    const cardTitle = document.getElementById('songCardTitle');
-    if (cardTitle) cardTitle.textContent = song.emoji + ' ' + song.title;
     const titleEl = document.getElementById('songTitleText');
     if (titleEl) titleEl.textContent = song.title;
-    const subEl = document.getElementById('songSubtitleText');
-    if (subEl) subEl.textContent = song.subtitle;
     const emojiEl = document.getElementById('songIconEmoji');
     if (emojiEl) emojiEl.textContent = song.emoji;
     const audio = document.getElementById('songAudio');
