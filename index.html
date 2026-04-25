@@ -1759,7 +1759,7 @@
             </div>
           </div>
           <!-- 🎵 커스텀 시니어 플레이어 -->
-          <audio id="songAudio" preload="auto"
+          <audio id="songAudio" preload="auto" playsinline webkit-playsinline
             onplay="onSongPlay()" onpause="onSongPause()" onended="onSongEnded()"
             ontimeupdate="onSongTimeUpdate()" onloadedmetadata="onSongTimeUpdate()">
             브라우저가 오디오를 지원하지 않습니다.
@@ -2783,7 +2783,13 @@
     }
 
     try {
-      audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+      audioStream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: false,
+          noiseSuppression: false,
+          autoGainControl: false
+        }
+      });
       audioContext = new (window.AudioContext || window.webkitAudioContext)();
       analyser = audioContext.createAnalyser();
       analyser.fftSize = 2048; analyser.smoothingTimeConstant = 0.82;
@@ -2942,7 +2948,13 @@
     // 마이크 스트림 요청
     try {
       if (!audioStream || audioStream.getTracks().every(t => t.readyState === 'ended')) {
-        audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+        audioStream = await navigator.mediaDevices.getUserMedia({
+        audio: {
+          echoCancellation: false,
+          noiseSuppression: false,
+          autoGainControl: false
+        }
+      });
       }
       analyser  = audioContext.createAnalyser();
       analyser.fftSize = 2048; analyser.smoothingTimeConstant = 0.82;
