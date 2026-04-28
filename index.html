@@ -6,13 +6,13 @@
   <meta name="theme-color" content="#FF6B35" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-title" content="뇌웃음365 | Brain Smile 365" />
-  <meta name="description" content="매일 5분 두뇌를 깨우는 치매예방 트레이닝 — 뇌웃음365 | Brain Smile 365" />
+  <meta name="description" content="매일 5분 두뇌를 깨우는 즐거운 뇌 훈련 — 뇌웃음365 | Brain Smile 365" />
   <!-- PWA -->
   <link rel="manifest" href="/manifest.json" />
   <meta name="mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
-  <title>뇌웃음365 | Brain Smile 365 — 치매예방 트레이닝</title>
+  <title>뇌웃음365 | Brain Smile 365 — 즐거운 뇌 훈련</title>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700;900&display=swap" rel="stylesheet" />
   <style>
     :root {
@@ -264,6 +264,46 @@
     .mode-emoji{ font-size:28px; margin-bottom:8px; display:block; }
     .mode-name{ font-size:17px; font-weight:900; margin-bottom:4px; }
     .mode-desc-txt{ font-size:14px; color:var(--text-sub); line-height:1.5; }
+
+    /* ── 단계 배지 (도전 모드 / 미션 체크리스트 공용) ── */
+    .step-badge{
+      display:inline-block;
+      background:linear-gradient(135deg,#ff8c42,#ff6b35);
+      color:#fff;
+      font-weight:900;
+      font-size:12px;
+      padding:3px 9px;
+      border-radius:999px;
+      letter-spacing:0.3px;
+      box-shadow:0 2px 4px rgba(255,107,53,0.25);
+    }
+    .mode-btn .step-badge{
+      font-size:11px;
+      padding:2px 8px;
+    }
+    /* 도전 모드 카드 헤더 - 배지와 이모지를 한 줄에 */
+    .mode-header{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      margin-bottom:8px;
+    }
+    .mode-header .mode-emoji{
+      margin-bottom:0;
+      display:inline-block;
+    }
+    .mc-step-badge{
+      display:inline-block;
+      background:linear-gradient(135deg,#ff8c42,#ff6b35);
+      color:#fff;
+      font-weight:900;
+      font-size:11px;
+      padding:2px 7px;
+      border-radius:999px;
+      margin-right:6px;
+      vertical-align:middle;
+      box-shadow:0 1px 3px rgba(255,107,53,0.25);
+    }
 
     /* ── 미션 박스 ── */
     .mission-box{
@@ -1259,16 +1299,16 @@
     }
   </style>
   <meta property="og:title" content="뇌웃음365 | Brain Smile 365" />
-  <meta property="og:description" content="매일 5분 두뇌를 깨우는 치매예방 트레이닝" />
+  <meta property="og:description" content="매일 5분 두뇌를 깨우는 즐거운 뇌 훈련" />
   <meta property="og:locale" content="ko_KR" />
   <meta property="og:locale:alternate" content="en_US" />
   <!-- 영문 앱명 / OG Tags -->
   <meta property="og:title" content="뇌웃음365 | Brain Smile 365" />
-  <meta property="og:description" content="매일 5분 두뇌를 깨우는 치매예방 트레이닝 — Boost Your Brain Every Day!" />
+  <meta property="og:description" content="매일 5분 두뇌를 깨우는 즐거운 뇌 훈련 — Boost Your Brain Every Day!" />
   <meta property="og:locale" content="ko_KR" />
   <meta property="og:locale:alternate" content="en_US" />
   <meta name="application-name" content="Brain Smile 365" />
-  <meta name="copyright" content="© 2026 뇌웃음365 · Goldsun9 · All rights reserved." />
+  <meta name="copyright" content="© 2026 뇌웃음365 · 김명구 · All rights reserved." />
 </head>
 <body>
 <!-- ══════════════════════════════════════════
@@ -1341,7 +1381,7 @@
       <div class="clap-hero-emoji">👏</div>
       <div>
         <div class="clap-hero-title">7가지 건강 박수</div>
-        <div class="clap-hero-sub">매일 박수로 혈액순환·치매예방·소화력까지!</div>
+        <div class="clap-hero-sub">매일 박수로 혈액순환·두뇌활력·소화력까지!</div>
       </div>
     </div>
 
@@ -1368,7 +1408,7 @@
         <img style="width:100%;aspect-ratio:1/1;object-fit:cover;display:block;" src="data:image/png;base64,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" alt="👆 손끝박수">
         <div style="padding:7px 10px 9px;">
           <div style="font-size:13px;font-weight:900;color:var(--text);margin-bottom:2px;">👆 손끝박수</div>
-          <div style="font-size:11px;color:var(--primary);font-weight:700;">시력회복 · 비염 · 치매예방</div>
+          <div style="font-size:11px;color:var(--primary);font-weight:700;">시력회복 · 비염 · 두뇌활력</div>
         </div>
       </div>
       <div style="background:var(--surface);border:1.5px solid var(--border);border-radius:16px;overflow:hidden;box-shadow:0 2px 8px rgba(0,0,0,.06);">
@@ -1408,7 +1448,7 @@
 
     <div class="hero-banner" style="padding:18px 20px;">
       <div class="hero-title" style="font-size:22px; margin-bottom:6px;">웃어야 이긴다 365!</div>
-      <div class="hero-desc" style="font-size:15px;">웃음과 박수, 노래와 발성 그리고 감사는<br>치매 예방에 가장 좋은 뇌 영양제입니다.<br>365일, 매일 이겨나가요! 💪</div>
+      <div class="hero-desc" style="font-size:15px;">웃음과 박수, 노래와 발성 그리고 감사는<br>건강한 두뇌 생활에 가장 좋은 뇌 영양제입니다.<br>365일, 매일 이겨나가요! 💪</div>
       <div class="hero-streak" id="streakBadge">🔥 연속 1일째</div>
     </div>
 
@@ -1447,7 +1487,7 @@
         <div class="mc-item" id="mc-laugh">
           <div class="mc-check" id="mc-check-laugh">😄</div>
           <div class="mc-info">
-            <div class="mc-name">소리내서 웃기</div>
+            <div class="mc-name"><span class="mc-step-badge">1단계</span>소리내서 웃기</div>
             <div class="mc-sub" id="mc-sub-laugh">오늘 목표</div>
           </div>
           <div class="mc-right">
@@ -1458,7 +1498,7 @@
         <div class="mc-item" id="mc-pronounce">
           <div class="mc-check" id="mc-check-pronounce">🗣️</div>
           <div class="mc-info">
-            <div class="mc-name">발음 따라하기</div>
+            <div class="mc-name"><span class="mc-step-badge">2단계</span>발음 따라하기</div>
             <div class="mc-sub" id="mc-sub-pronounce">오늘 목표</div>
           </div>
           <div class="mc-right">
@@ -1469,7 +1509,7 @@
         <div class="mc-item" id="mc-song">
           <div class="mc-check" id="mc-check-song">🎵</div>
           <div class="mc-info">
-            <div class="mc-name">노래 따라하기</div>
+            <div class="mc-name"><span class="mc-step-badge">3단계</span>노래 따라하기</div>
             <div class="mc-sub" id="mc-sub-song">오늘 목표</div>
           </div>
           <div class="mc-right">
@@ -1480,7 +1520,7 @@
         <div class="mc-item" id="mc-clap">
           <div class="mc-check" id="mc-check-clap">👏</div>
           <div class="mc-info">
-            <div class="mc-name">건강박수 치기</div>
+            <div class="mc-name"><span class="mc-step-badge">4단계</span>건강박수 치기</div>
             <div class="mc-sub" id="mc-sub-clap">오늘 목표</div>
           </div>
           <div class="mc-right">
@@ -1491,7 +1531,7 @@
         <div class="mc-item" id="mc-thanks">
           <div class="mc-check" id="mc-check-thanks">🙏</div>
           <div class="mc-info">
-            <div class="mc-name">오늘의 감사하기</div>
+            <div class="mc-name"><span class="mc-step-badge">5단계</span>오늘의 감사하기 — 말하기</div>
             <div class="mc-sub" id="mc-sub-thanks">오늘 감사한 일을 떠올려 보세요</div>
           </div>
           <div class="mc-right">
@@ -1680,7 +1720,7 @@
             <div class="rs-badge" style="background:var(--green-light);color:var(--green);">1단계</div>
             <div class="rs-title">단어 역순 · 기초 체력 기르기</div>
           </div>
-          <div class="rs-row"><span class="rs-original">치매 예방</span><span class="rs-arrow">→</span><span class="rs-reversed">방예 매치</span></div>
+          <div class="rs-row"><span class="rs-original">건강한 삶</span><span class="rs-arrow">→</span><span class="rs-reversed">삶 한강건</span></div>
           <div class="rs-row"><span class="rs-original">대한민국</span><span class="rs-arrow">→</span><span class="rs-reversed">국민한대</span></div>
         </div>
 
@@ -1860,7 +1900,7 @@
 
       <!-- 카피라이트 라인 -->
       <div style="font-size:11px; color:rgba(255,255,255,0.35); letter-spacing:0.3px;">
-        © 2026 뇌웃음365 · Goldsun9 · All rights reserved.
+        © 2026 뇌웃음365 · 김명구 · All rights reserved.
       </div>
     </div>
 
@@ -1944,7 +1984,7 @@
       <div class="card-title">주간 성장 카드</div>
       <div class="card-sub">가족이나 지인과 나눌 수 있어요</div>
       <div class="share-card">
-        <div class="sc-brand">뇌웃음365 · 치매예방 트레이닝</div>
+        <div class="sc-brand">뇌웃음365 · 즐거운 뇌 훈련</div>
         <div class="sc-title">이번 주 나의 웃음 성장 리포트 😄</div>
         <div class="sc-grid">
           <div class="sc-item"><div class="sc-lbl">최고 점수</div><div class="sc-val" id="cBest">0점</div></div>
@@ -2178,7 +2218,7 @@
   const SONGS = {
     original: {
       title: '웃음 발음 체조송',
-      subtitle: '뇌웃음365 · Goldsun9',
+      subtitle: '뇌웃음365 · 김명구',
       src: 'songs/original.mp3',
       duration: 73,
       emoji: '🎵',
@@ -2368,7 +2408,7 @@
     { name:'💪 건강 100세 챌린지',      tagline:'이 미션 하나로 오늘도 건강해집니다!',            confetti:'💪🏅🎉🌈✨' },
     { name:'🌈 무지개 웃음 미션',       tagline:'일곱 빛깔 웃음으로 기분을 가득 채워요!',         confetti:'🌈😄🎊💖✨' },
     { name:'🎵 신나는 리듬 챌린지',     tagline:'리듬에 맞춰 몸도 마음도 가볍게!',               confetti:'🎵🎶🎉💃✨' },
-    { name:'🌿 치매 예방 특별 미션',    tagline:'오늘의 웃음이 내일의 건강을 만들어요!',          confetti:'🌿🧠💚✨🏆' },
+    { name:'🌿 두뇌 건강 특별 미션',    tagline:'오늘의 웃음이 내일의 건강을 만들어요!',          confetti:'🌿🧠💚✨🏆' },
     { name:'☀️ 맑음 에너지 충전 미션', tagline:'햇살처럼 밝은 에너지로 하루를 시작해요!',        confetti:'☀️⚡🌟💛🎉' },
     { name:'🎯 집중 뇌 훈련 미션',      tagline:'집중해서 하면 뇌가 훨씬 더 좋아져요!',          confetti:'🎯🧠🏹✨💪' },
     { name:'🦁 용기 내서 웃기 미션',    tagline:'오늘은 사자처럼 크게 웃어봐요!',                confetti:'🦁😂🎊💛✨' },
@@ -2530,9 +2570,9 @@
 ✅ 오늘의 감사하기 완료 🙏
 
 웃음과 박수, 노래와 발성 그리고 감사는
-치매 예방에 가장 좋은 뇌 영양제입니다! 💪
+맑은 정신과 즐거운 하루를 위한 뇌 영양제입니다! 💪
 
-#뇌웃음365 #치매예방 #뇌건강 #웃음체조`;
+#뇌웃음365 #뇌건강 #두뇌훈련 #웃음체조`;
     document.getElementById('mccPreview').textContent = text;
     return text;
   }
@@ -2571,11 +2611,14 @@
   function renderModes() {
     const g = document.getElementById('modeGrid');
     g.innerHTML = '';
-    modes.forEach(m => {
+    modes.forEach((m, idx) => {
       const div = document.createElement('div');
       div.className = 'mode-btn' + (m.key === curMode.key ? ' active' : '');
       div.innerHTML = `
-        <span class="mode-emoji">${m.emoji}</span>
+        <div class="mode-header">
+          <span class="step-badge">${idx + 1}단계</span>
+          <span class="mode-emoji">${m.emoji}</span>
+        </div>
         <div class="mode-name">${m.name}</div>
         <div class="mode-desc-txt">${m.desc}</div>
       `;
@@ -3118,7 +3161,7 @@
 <defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#fff8f5"/><stop offset="100%" stop-color="#fff3ee"/></linearGradient></defs>
 <rect width="1080" height="1080" rx="40" fill="url(#bg)"/>
 <rect x="40" y="40" width="1000" height="6" rx="3" fill="#FF6B35" opacity=".3"/>
-<text x="72" y="130" font-size="34" font-family="Arial" fill="#FF6B35" font-weight="700">뇌웃음365 · 치매예방 트레이닝</text>
+<text x="72" y="130" font-size="34" font-family="Arial" fill="#FF6B35" font-weight="700">뇌웃음365 · 즐거운 뇌 훈련</text>
 <text x="72" y="210" font-size="58" font-family="Arial" fill="#1a1a2e" font-weight="900">이번 주 나의 웃음 성장 💪</text>
 <rect x="72" y="260" width="460" height="200" rx="28" fill="#fff" stroke="#ffd4c2" stroke-width="2"/>
 <rect x="570" y="260" width="440" height="200" rx="28" fill="#fff" stroke="#ffd4c2" stroke-width="2"/>
@@ -3127,7 +3170,7 @@
 <text x="610" y="325" font-size="26" font-family="Arial" fill="#9199a8">평균 점수</text>
 <text x="610" y="415" font-size="78" font-family="Arial" fill="#1a1a2e" font-weight="900">${avg}</text>
 <text x="72" y="560" font-size="38" font-family="Arial" fill="#1a1a2e" font-weight="700">오늘도 즐겁게 웃으며 건강을 지켜요! 😄</text>
-<text x="72" y="970" font-size="26" font-family="Arial" fill="#9199a8">뇌웃음365 · Goldsun9 · haruwoom.kr</text>
+<text x="72" y="970" font-size="26" font-family="Arial" fill="#9199a8">뇌웃음365 · 김명구 · haruwoom.kr</text>
 </svg>`;
     const blob = new Blob([svg],{type:'image/svg+xml'});
     const url  = URL.createObjectURL(blob);
@@ -3636,7 +3679,7 @@
       text += `💜 오늘의 감사\n"${todayThanks}"\n\n`;
     }
 
-    text += `웃음·박수·노래·발성·감사는\n치매 예방의 가장 좋은 영양제입니다 💪\n\n— 뇌웃음365`;
+    text += `웃음·박수·노래·발성·감사는\n맑은 정신과 즐거운 하루를 위한 영양제입니다 💪\n\n— 뇌웃음365`;
 
     if (navigator.share) {
       navigator.share({
