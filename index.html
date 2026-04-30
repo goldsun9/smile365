@@ -1329,6 +1329,11 @@
     <div class="auth-hint">💡 대시(-)는 자동으로 붙어요. 숫자만 입력하세요.</div>
 
     <div class="auth-error-msg" id="authError"></div>
+    <a href="https://smartstore.naver.com/sdca" target="_blank" rel="noopener"
+       class="smartstore-btn smartstore-btn-error" id="authErrorBuyBtn">
+      <span id="authErrorBuyBtnText">🛒 코드 구매하기</span>
+      <span class="ss-sub">네이버 스마트스토어로 이동합니다</span>
+    </a>
     <div id="authBlocked" style="display:none;"></div>
 
     <button class="auth-submit" id="authSubmitBtn" onclick="verifyAuthCode()">
@@ -1337,7 +1342,11 @@
 
     <div class="auth-info-box">
       <strong>🛒 구매는 어디서 하나요?</strong><br>
-      당근마켓, 크몽, 또는 운영자에게 직접 구매하실 수 있습니다.<br><br>
+      네이버 스마트스토어에서 구매하실 수 있습니다.
+      <a href="https://smartstore.naver.com/sdca" target="_blank" rel="noopener" class="smartstore-btn">
+        🛒 네이버 스마트스토어 바로가기
+        <span class="ss-sub">smartstore.naver.com/sdca</span>
+      </a>
       <strong>📞 코드 분실 / 문의</strong><br>
       <a href="#" onclick="event.preventDefault(); alert('운영자에게 연락해주세요.\n카톡 또는 구매처로 문의하시면 확인 도와드립니다.');">여기를 눌러 문의하기</a>
     </div>
@@ -1781,7 +1790,7 @@
 
       <!-- ② 곡 선택 탭 -->
       <div class="song-selector">
-        <button class="song-tab active" data-song-id="original" onclick="selectSong('original')">🎵 웃음 체조송</button>
+        <button class="song-tab active" data-song-id="original" onclick="selectSong('original')">🎵 모음자음 따라송</button>
         <button class="song-tab" data-song-id="hormone" onclick="selectSong('hormone')">💊 건강 호르몬</button>
         <button class="song-tab" data-song-id="clap" onclick="selectSong('clap')">👏 신통방통 박수</button>
       </div>
@@ -1793,7 +1802,7 @@
           <div style="display:flex; align-items:center; gap:12px; margin-bottom:14px;">
             <div id="songIconBox" style="width:48px; height:48px; background:linear-gradient(135deg,#e91e8c,#ff6b9d); border-radius:12px; display:flex; align-items:center; justify-content:center; font-size:22px; flex-shrink:0;"><span id="songIconEmoji">🎵</span></div>
             <div>
-              <div id="songTitleText" style="font-size:18px; font-weight:900; color:var(--text);">웃음 발음 체조송</div>
+              <div id="songTitleText" style="font-size:18px; font-weight:900; color:var(--text);">모음자음 따라송</div>
             </div>
           </div>
           <!-- 🎵 커스텀 시니어 플레이어 -->
@@ -2131,6 +2140,30 @@
     .auth-blocked-desc { font-size:14px; color:#7f1d1d; line-height:1.5; }
     .auth-blocked-timer { font-size:20px; font-weight:900; color:#dc2626; margin-top:10px; }
 
+    /* 🛒 네이버 스마트스토어 바로가기 버튼 (시니어 친화 디자인) */
+    .smartstore-btn {
+      display:block; width:100%; box-sizing:border-box;
+      padding:16px 14px; margin:10px 0 4px;
+      background:#03c75a; color:#fff !important;
+      text-align:center; text-decoration:none !important;
+      border-radius:12px; border:none;
+      font-family:inherit; font-size:17px; font-weight:900;
+      letter-spacing:-.3px; line-height:1.3;
+      box-shadow:0 4px 14px rgba(3,199,90,.28);
+      transition:all .2s; cursor:pointer;
+    }
+    .smartstore-btn:active { transform:scale(.97); background:#02a84c; }
+    .smartstore-btn:hover { background:#02b34d; }
+    .smartstore-btn .ss-sub {
+      display:block; font-size:12px; font-weight:600;
+      opacity:.92; margin-top:3px; letter-spacing:0;
+    }
+    /* 에러 발생 시 노출되는 보조 버튼 */
+    .smartstore-btn-error {
+      display:none; margin-top:12px;
+    }
+    .smartstore-btn-error.show { display:block; }
+
   
     /* ══════════════════════════════════════════
        🎵 커스텀 시니어 플레이어
@@ -2217,7 +2250,7 @@
   /* ─── 노래 데이터 (외부 MP3 파일 참조) ─── */
   const SONGS = {
     original: {
-      title: '웃음 발음 체조송',
+      title: '모음자음 따라송',
       subtitle: '뇌웃음365 · 김명구',
       src: 'songs/original.mp3',
       duration: 73,
@@ -4111,6 +4144,9 @@
     input.value = val;
     input.classList.remove('error');
     document.getElementById('authError').classList.remove('show');
+    // 사용자가 새로 입력 시작하면 구매 버튼 숨김
+    const buyBtn = document.getElementById('authErrorBuyBtn');
+    if (buyBtn) buyBtn.classList.remove('show');
   }
 
   // 차단 상태 확인
@@ -4152,6 +4188,11 @@
           아래 시간 뒤에 다시 시도해주세요.
         </div>
         <div class="auth-blocked-timer" id="authBlockedTimer">약 ${formatTime(remainMs)} 남음</div>
+        <a href="https://smartstore.naver.com/sdca" target="_blank" rel="noopener"
+           class="smartstore-btn" style="margin-top:16px;">
+          🛒 새 코드 구매하기
+          <span class="ss-sub">기다리는 동안 네이버 스마트스토어에서 구매</span>
+        </a>
       </div>
     `;
 
@@ -4251,6 +4292,26 @@
     const errDiv = document.getElementById('authError');
     errDiv.textContent = msg;
     errDiv.classList.add('show');
+
+    // 🛒 에러 유형에 따라 구매 버튼 노출/숨김 + 라벨 변경
+    const buyBtn = document.getElementById('authErrorBuyBtn');
+    const buyBtnText = document.getElementById('authErrorBuyBtnText');
+    if (buyBtn && buyBtnText) {
+      if (msg.includes('12자리')) {
+        // 단순 입력 형식 오류 - 버튼 숨김 (오타일 가능성 높음)
+        buyBtn.classList.remove('show');
+      } else if (msg.includes('만료')) {
+        buyBtnText.textContent = '🛒 새 코드 구매하기';
+        buyBtn.classList.add('show');
+      } else if (msg.includes('중지')) {
+        buyBtnText.textContent = '🛒 새 코드 구매하기';
+        buyBtn.classList.add('show');
+      } else {
+        // 코드가 맞지 않는 경우 - 코드가 없을 가능성도 있음
+        buyBtnText.textContent = '🛒 코드 구매하기';
+        buyBtn.classList.add('show');
+      }
+    }
   }
 
   // 페이지 로드 시 인증 확인
