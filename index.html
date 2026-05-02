@@ -4096,17 +4096,59 @@
   // 코드 추가 시 code-generator.html 에서 생성 후 여기에 추가하세요
   // 형식: { hash: "해시값", plan: "lifetime" | "yearly" | "event", expires: "YYYY-MM-DD" | null }
   const VALID_CODE_HASHES = [
-    // ─── 샘플 코드 10개 (테스트/판매용) ───
-    { hash: "5058413077b7212b", plan: "lifetime", expires: null },
-    { hash: "2376a88a4b8eaa92", plan: "lifetime", expires: null },
-    { hash: "e958da9ec1239ec2", plan: "lifetime", expires: null },
-    { hash: "b4d74a140db7b8d5", plan: "lifetime", expires: null },
-    { hash: "38e084d2a0c173b4", plan: "lifetime", expires: null },
-    { hash: "72d69decf513ed18", plan: "lifetime", expires: null },
-    { hash: "80c5103a39e09e80", plan: "lifetime", expires: null },
-    { hash: "aa1c89468f44e082", plan: "lifetime", expires: null },
-    { hash: "bef770674092689e", plan: "lifetime", expires: null },
-    { hash: "7840b6560ee27181", plan: "lifetime", expires: null },
+    // ═══════════════════════════════════════════════════════
+    // 🔑 마스터 코드 (운영자 전용 - 1968-1207-0427)
+    // ═══════════════════════════════════════════════════════
+    { hash: "ff7dc0f5cb3dc615", plan: "lifetime", expires: null },
+
+    // ═══════════════════════════════════════════════════════
+    // 🎁 5/20 교회 워크숍 60일 체험권 30개 (만료: 2026-07-19)
+    // ═══════════════════════════════════════════════════════
+    { hash: "279fe35998c43862", plan: "event", expires: "2026-07-19" }, // #01 (5200-5088-0001)
+    { hash: "4a379dfa54044e9d", plan: "event", expires: "2026-07-19" }, // #02 (5200-2370-0002)
+    { hash: "4bf251e2a0648993", plan: "event", expires: "2026-07-19" }, // #03 (5200-0928-0003)
+    { hash: "591a2c98d311a92e", plan: "event", expires: "2026-07-19" }, // #04 (5200-5267-0004)
+    { hash: "0027e1119c31c81c", plan: "event", expires: "2026-07-19" }, // #05 (5200-7761-0005)
+    { hash: "78dd408c6b2aac9c", plan: "event", expires: "2026-07-19" }, // #06 (5200-7626-0006)
+    { hash: "c61307936383b806", plan: "event", expires: "2026-07-19" }, // #07 (5200-6507-0007)
+    { hash: "d7f7de4ee8036441", plan: "event", expires: "2026-07-19" }, // #08 (5200-3407-0008)
+    { hash: "ef3161532da5a9f2", plan: "event", expires: "2026-07-19" }, // #09 (5200-1649-0009)
+    { hash: "08af92f2ce4671ed", plan: "event", expires: "2026-07-19" }, // #10 (5200-1032-0010)
+    { hash: "f69434c09f6c2a3a", plan: "event", expires: "2026-07-19" }, // #11 (5200-8044-0011)
+    { hash: "922f35974d7f01c3", plan: "event", expires: "2026-07-19" }, // #12 (5200-5136-0012)
+    { hash: "8e73348dfdb963de", plan: "event", expires: "2026-07-19" }, // #13 (5200-7818-0013)
+    { hash: "205ad802e3d172d4", plan: "event", expires: "2026-07-19" }, // #14 (5200-4063-0014)
+    { hash: "736fe472c31eb692", plan: "event", expires: "2026-07-19" }, // #15 (5200-3334-0015)
+    { hash: "6e26a88991d953e1", plan: "event", expires: "2026-07-19" }, // #16 (5200-9438-0016)
+    { hash: "adb286a86e2e541a", plan: "event", expires: "2026-07-19" }, // #17 (5200-4391-0017)
+    { hash: "31837780d9f75f6f", plan: "event", expires: "2026-07-19" }, // #18 (5200-8189-0018)
+    { hash: "127f4b802b4bfe6e", plan: "event", expires: "2026-07-19" }, // #19 (5200-3207-0019)
+    { hash: "a9ab8a5eb151057b", plan: "event", expires: "2026-07-19" }, // #20 (5200-2659-0020)
+    { hash: "128ceb4391345b06", plan: "event", expires: "2026-07-19" }, // #21 (5200-0010-0021)
+    { hash: "8e1df19f692cfce4", plan: "event", expires: "2026-07-19" }, // #22 (5200-7425-0022)
+    { hash: "77359f13812bec14", plan: "event", expires: "2026-07-19" }, // #23 (5200-7306-0023)
+    { hash: "7677864f36d08a17", plan: "event", expires: "2026-07-19" }, // #24 (5200-6765-0024)
+    { hash: "bc9e45452ed6d729", plan: "event", expires: "2026-07-19" }, // #25 (5200-4313-0025)
+    { hash: "e6cbe64583787484", plan: "event", expires: "2026-07-19" }, // #26 (5200-9131-0026)
+    { hash: "706b965c9e373406", plan: "event", expires: "2026-07-19" }, // #27 (5200-7629-0027)
+    { hash: "d02f83febfd6b602", plan: "event", expires: "2026-07-19" }, // #28 (5200-1615-0028)
+    { hash: "24d0e101d9946d4c", plan: "event", expires: "2026-07-19" }, // #29 (5200-4053-0029)
+    { hash: "59a154b715458c2a", plan: "event", expires: "2026-07-19" }, // #30 (5200-2237-0030)
+
+    // ═══════════════════════════════════════════════════════
+    // (참고) 기존 샘플 코드 10개 - 분실 위험으로 비활성화
+    // 필요 시 주석만 해제하면 다시 살아납니다
+    // ═══════════════════════════════════════════════════════
+    // { hash: "5058413077b7212b", plan: "lifetime", expires: null },
+    // { hash: "2376a88a4b8eaa92", plan: "lifetime", expires: null },
+    // { hash: "e958da9ec1239ec2", plan: "lifetime", expires: null },
+    // { hash: "b4d74a140db7b8d5", plan: "lifetime", expires: null },
+    // { hash: "38e084d2a0c173b4", plan: "lifetime", expires: null },
+    // { hash: "72d69decf513ed18", plan: "lifetime", expires: null },
+    // { hash: "80c5103a39e09e80", plan: "lifetime", expires: null },
+    // { hash: "aa1c89468f44e082", plan: "lifetime", expires: null },
+    // { hash: "bef770674092689e", plan: "lifetime", expires: null },
+    // { hash: "7840b6560ee27181", plan: "lifetime", expires: null },
   ];
 
   // 차단된 코드 (환불 등) - 여기에 추가하면 강제 차단됨
