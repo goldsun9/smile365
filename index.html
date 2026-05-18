@@ -874,7 +874,7 @@
     }
 
     /* ════════════════════════════════
-       구매 탭 — 핵심 디자인
+       증정 안내 탭 — 핵심 디자인
     ════════════════════════════════ */
 
     /* 상단 가치 제안 */
@@ -1312,15 +1312,15 @@
 </head>
 <body>
 <!-- ══════════════════════════════════════════
-     🔐 구매 코드 인증 화면
+     🎁 무료 증정 코드 인증 화면
      ══════════════════════════════════════════ -->
 <div class="auth-overlay" id="authOverlay">
   <div class="auth-box">
     <div class="auth-logo">🧠💗</div>
     <div class="auth-title">뇌웃음365</div>
-    <div class="auth-subtitle">구매하신 코드를 입력해주세요<br>숫자 12자리를 차례로 눌러주세요</div>
+    <div class="auth-subtitle">강사님께 받으신 코드를 입력해주세요<br>숫자 12자리를 차례로 눌러주세요</div>
 
-    <label class="auth-label" for="authCodeInput">구매 코드</label>
+    <label class="auth-label" for="authCodeInput">증정 코드</label>
     <input type="tel" inputmode="numeric" id="authCodeInput" class="auth-input"
            placeholder="1234-5678-9012"
            maxlength="14" autocomplete="off"
@@ -1329,10 +1329,10 @@
     <div class="auth-hint">💡 대시(-)는 자동으로 붙어요. 숫자만 입력하세요.</div>
 
     <div class="auth-error-msg" id="authError"></div>
-    <a href="https://smartstore.naver.com/sdca" target="_blank" rel="noopener"
+    <a href="https://pf.kakao.com/_ugDsX" target="_blank" rel="noopener"
        class="smartstore-btn smartstore-btn-error" id="authErrorBuyBtn">
-      <span id="authErrorBuyBtnText">🛒 코드 구매하기</span>
-      <span class="ss-sub">네이버 스마트스토어로 이동합니다</span>
+      <span id="authErrorBuyBtnText">💬 강사 카톡으로 문의하기</span>
+      <span class="ss-sub">김명구 강사 채널이 열립니다</span>
     </a>
     <div id="authBlocked" style="display:none;"></div>
 
@@ -1341,14 +1341,15 @@
     </button>
 
     <div class="auth-info-box">
-      <strong>🛒 구매는 어디서 하나요?</strong><br>
-      네이버 스마트스토어에서 구매하실 수 있습니다.
-      <a href="https://smartstore.naver.com/sdca" target="_blank" rel="noopener" class="smartstore-btn">
-        🛒 네이버 스마트스토어 바로가기
-        <span class="ss-sub">smartstore.naver.com/sdca</span>
+      <strong>🎁 코드는 어디서 받나요?</strong><br>
+      김명구 강사 카톡 채널을 친구 추가하시면<br>
+      <strong>무료 증정 코드</strong>를 받으실 수 있습니다.
+      <a href="https://pf.kakao.com/_ugDsX" target="_blank" rel="noopener" class="smartstore-btn">
+        💬 카톡 채널 친구 추가
+        <span class="ss-sub">카카오톡에서 "smile365" 검색</span>
       </a>
-      <strong>📞 코드 분실 / 문의</strong><br>
-      <a href="#" onclick="event.preventDefault(); alert('운영자에게 연락해주세요.\n카톡 또는 구매처로 문의하시면 확인 도와드립니다.');">여기를 눌러 문의하기</a>
+      <strong>📞 코드 분실 / 갱신 / 문의</strong><br>
+      <a href="#" onclick="event.preventDefault(); alert('김명구 강사에게 카톡으로 연락해주세요.\n\n방법 1) 카톡 채널 \u0022smile365\u0022 검색\n방법 2) 채널 이름 \u0022김명구 강사\u0022 검색\n\n친구 추가 후 메시지 남겨주시면 도와드립니다.');">여기를 눌러 안내 보기</a>
     </div>
 
     <div class="auth-legal">
@@ -2042,7 +2043,7 @@
   @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
 
     /* ══════════════════════════════════════════
-       🔐 구매 코드 인증 화면
+       🎁 무료 증정 코드 인증 화면
        ══════════════════════════════════════════ */
     .auth-overlay {
       position:fixed; inset:0; z-index:99999;
@@ -2140,7 +2141,7 @@
     .auth-blocked-desc { font-size:14px; color:#7f1d1d; line-height:1.5; }
     .auth-blocked-timer { font-size:20px; font-weight:900; color:#dc2626; margin-top:10px; }
 
-    /* 🛒 네이버 스마트스토어 바로가기 버튼 (시니어 친화 디자인) */
+    /* 💬 강사 카톡 채널 바로가기 버튼 (시니어 친화 디자인) */
     .smartstore-btn {
       display:block; width:100%; box-sizing:border-box;
       padding:16px 14px; margin:10px 0 4px;
@@ -4086,73 +4087,66 @@
 <script>
 
   /* ══════════════════════════════════════════
-     🔐 구매 코드 인증 시스템 (해시 방식)
+     🎁 무료 증정 코드 인증 시스템 (해시 방식)
+     무료 모델 v2.3.0 (2026-05-16)
      ══════════════════════════════════════════ */
 
   // 시크릿 솔트 (코드 해싱용 - 변경하지 마세요!)
   const AUTH_SALT = "BrainLaugh365_2026_Secret_Key_9x7K3p2Q";
 
-  // 유효한 구매 코드 해시 목록
+  // 유효한 증정 코드 해시 목록
   // 코드 추가 시 code-generator.html 에서 생성 후 여기에 추가하세요
   // 형식: { hash: "해시값", plan: "lifetime" | "yearly" | "event", expires: "YYYY-MM-DD" | null }
   const VALID_CODE_HASHES = [
     // ═══════════════════════════════════════════════════════
-    // 🔑 마스터 코드 (운영자 전용 - 1968-1207-0427)
+    // 🔑 마스터 코드 (운영자 전용 - 별도 안전보관)
+    // 발급일: 2026-05-16 | 패턴: 본인 지정 12자리
+    // ※ 평문 코드는 코드에 절대 기록하지 않음
     // ═══════════════════════════════════════════════════════
-    { hash: "ff7dc0f5cb3dc615", plan: "lifetime", expires: null },
+    { hash: "f7a543d9ce8fe044", plan: "lifetime", expires: null },
 
     // ═══════════════════════════════════════════════════════
-    // 🎁 5/20 교회 워크숍 60일 체험권 30개 (만료: 2026-07-19)
+    // 🎁 5/20 교회 강의 무료 증정 코드 30개
+    // 발급일: 2026-05-16 | 유효: 2년 | 만료: 2028-05-20
+    // 무료 모델: 만료 1개월 전 카톡 채널로 무료 갱신 안내
     // ═══════════════════════════════════════════════════════
-    { hash: "279fe35998c43862", plan: "event", expires: "2026-07-19" }, // #01 (5200-5088-0001)
-    { hash: "4a379dfa54044e9d", plan: "event", expires: "2026-07-19" }, // #02 (5200-2370-0002)
-    { hash: "4bf251e2a0648993", plan: "event", expires: "2026-07-19" }, // #03 (5200-0928-0003)
-    { hash: "591a2c98d311a92e", plan: "event", expires: "2026-07-19" }, // #04 (5200-5267-0004)
-    { hash: "0027e1119c31c81c", plan: "event", expires: "2026-07-19" }, // #05 (5200-7761-0005)
-    { hash: "78dd408c6b2aac9c", plan: "event", expires: "2026-07-19" }, // #06 (5200-7626-0006)
-    { hash: "c61307936383b806", plan: "event", expires: "2026-07-19" }, // #07 (5200-6507-0007)
-    { hash: "d7f7de4ee8036441", plan: "event", expires: "2026-07-19" }, // #08 (5200-3407-0008)
-    { hash: "ef3161532da5a9f2", plan: "event", expires: "2026-07-19" }, // #09 (5200-1649-0009)
-    { hash: "08af92f2ce4671ed", plan: "event", expires: "2026-07-19" }, // #10 (5200-1032-0010)
-    { hash: "f69434c09f6c2a3a", plan: "event", expires: "2026-07-19" }, // #11 (5200-8044-0011)
-    { hash: "922f35974d7f01c3", plan: "event", expires: "2026-07-19" }, // #12 (5200-5136-0012)
-    { hash: "8e73348dfdb963de", plan: "event", expires: "2026-07-19" }, // #13 (5200-7818-0013)
-    { hash: "205ad802e3d172d4", plan: "event", expires: "2026-07-19" }, // #14 (5200-4063-0014)
-    { hash: "736fe472c31eb692", plan: "event", expires: "2026-07-19" }, // #15 (5200-3334-0015)
-    { hash: "6e26a88991d953e1", plan: "event", expires: "2026-07-19" }, // #16 (5200-9438-0016)
-    { hash: "adb286a86e2e541a", plan: "event", expires: "2026-07-19" }, // #17 (5200-4391-0017)
-    { hash: "31837780d9f75f6f", plan: "event", expires: "2026-07-19" }, // #18 (5200-8189-0018)
-    { hash: "127f4b802b4bfe6e", plan: "event", expires: "2026-07-19" }, // #19 (5200-3207-0019)
-    { hash: "a9ab8a5eb151057b", plan: "event", expires: "2026-07-19" }, // #20 (5200-2659-0020)
-    { hash: "128ceb4391345b06", plan: "event", expires: "2026-07-19" }, // #21 (5200-0010-0021)
-    { hash: "8e1df19f692cfce4", plan: "event", expires: "2026-07-19" }, // #22 (5200-7425-0022)
-    { hash: "77359f13812bec14", plan: "event", expires: "2026-07-19" }, // #23 (5200-7306-0023)
-    { hash: "7677864f36d08a17", plan: "event", expires: "2026-07-19" }, // #24 (5200-6765-0024)
-    { hash: "bc9e45452ed6d729", plan: "event", expires: "2026-07-19" }, // #25 (5200-4313-0025)
-    { hash: "e6cbe64583787484", plan: "event", expires: "2026-07-19" }, // #26 (5200-9131-0026)
-    { hash: "706b965c9e373406", plan: "event", expires: "2026-07-19" }, // #27 (5200-7629-0027)
-    { hash: "d02f83febfd6b602", plan: "event", expires: "2026-07-19" }, // #28 (5200-1615-0028)
-    { hash: "24d0e101d9946d4c", plan: "event", expires: "2026-07-19" }, // #29 (5200-4053-0029)
-    { hash: "59a154b715458c2a", plan: "event", expires: "2026-07-19" }, // #30 (5200-2237-0030)
-
-    // ═══════════════════════════════════════════════════════
-    // (참고) 기존 샘플 코드 10개 - 분실 위험으로 비활성화
-    // 필요 시 주석만 해제하면 다시 살아납니다
-    // ═══════════════════════════════════════════════════════
-    // { hash: "5058413077b7212b", plan: "lifetime", expires: null },
-    // { hash: "2376a88a4b8eaa92", plan: "lifetime", expires: null },
-    // { hash: "e958da9ec1239ec2", plan: "lifetime", expires: null },
-    // { hash: "b4d74a140db7b8d5", plan: "lifetime", expires: null },
-    // { hash: "38e084d2a0c173b4", plan: "lifetime", expires: null },
-    // { hash: "72d69decf513ed18", plan: "lifetime", expires: null },
-    // { hash: "80c5103a39e09e80", plan: "lifetime", expires: null },
-    // { hash: "aa1c89468f44e082", plan: "lifetime", expires: null },
-    // { hash: "bef770674092689e", plan: "lifetime", expires: null },
-    // { hash: "7840b6560ee27181", plan: "lifetime", expires: null },
+    { hash: "279fe35998c43862", plan: "event", expires: "2028-05-20" }, // #01
+    { hash: "4a379dfa54044e9d", plan: "event", expires: "2028-05-20" }, // #02
+    { hash: "4bf251e2a0648993", plan: "event", expires: "2028-05-20" }, // #03
+    { hash: "591a2c98d311a92e", plan: "event", expires: "2028-05-20" }, // #04
+    { hash: "0027e1119c31c81c", plan: "event", expires: "2028-05-20" }, // #05
+    { hash: "78dd408c6b2aac9c", plan: "event", expires: "2028-05-20" }, // #06
+    { hash: "c61307936383b806", plan: "event", expires: "2028-05-20" }, // #07
+    { hash: "d7f7de4ee8036441", plan: "event", expires: "2028-05-20" }, // #08
+    { hash: "ef3161532da5a9f2", plan: "event", expires: "2028-05-20" }, // #09
+    { hash: "08af92f2ce4671ed", plan: "event", expires: "2028-05-20" }, // #10
+    { hash: "f69434c09f6c2a3a", plan: "event", expires: "2028-05-20" }, // #11
+    { hash: "922f35974d7f01c3", plan: "event", expires: "2028-05-20" }, // #12
+    { hash: "8e73348dfdb963de", plan: "event", expires: "2028-05-20" }, // #13
+    { hash: "205ad802e3d172d4", plan: "event", expires: "2028-05-20" }, // #14
+    { hash: "736fe472c31eb692", plan: "event", expires: "2028-05-20" }, // #15
+    { hash: "6e26a88991d953e1", plan: "event", expires: "2028-05-20" }, // #16
+    { hash: "adb286a86e2e541a", plan: "event", expires: "2028-05-20" }, // #17
+    { hash: "31837780d9f75f6f", plan: "event", expires: "2028-05-20" }, // #18
+    { hash: "127f4b802b4bfe6e", plan: "event", expires: "2028-05-20" }, // #19
+    { hash: "a9ab8a5eb151057b", plan: "event", expires: "2028-05-20" }, // #20
+    { hash: "128ceb4391345b06", plan: "event", expires: "2028-05-20" }, // #21
+    { hash: "8e1df19f692cfce4", plan: "event", expires: "2028-05-20" }, // #22
+    { hash: "77359f13812bec14", plan: "event", expires: "2028-05-20" }, // #23
+    { hash: "7677864f36d08a17", plan: "event", expires: "2028-05-20" }, // #24
+    { hash: "bc9e45452ed6d729", plan: "event", expires: "2028-05-20" }, // #25
+    { hash: "e6cbe64583787484", plan: "event", expires: "2028-05-20" }, // #26
+    { hash: "706b965c9e373406", plan: "event", expires: "2028-05-20" }, // #27
+    { hash: "d02f83febfd6b602", plan: "event", expires: "2028-05-20" }, // #28
+    { hash: "24d0e101d9946d4c", plan: "event", expires: "2028-05-20" }, // #29
+    { hash: "59a154b715458c2a", plan: "event", expires: "2028-05-20" }, // #30
   ];
 
-  // 차단된 코드 (환불 등) - 여기에 추가하면 강제 차단됨
-  const BLOCKED_CODE_HASHES = [];
+  // 차단된 코드 (분실/유출 시 강제 차단)
+  // 9999-9999-9999 = 테스트 차단 코드 (역추적 방지용 디코이)
+  const BLOCKED_CODE_HASHES = [
+    "bed865c5f9b47662", // 9999-9999-9999 차단
+  ];
 
   // 저장소 키
   const AUTH_KEY = 'hw_auth_v1';
@@ -4186,7 +4180,7 @@
     input.value = val;
     input.classList.remove('error');
     document.getElementById('authError').classList.remove('show');
-    // 사용자가 새로 입력 시작하면 구매 버튼 숨김
+    // 사용자가 새로 입력 시작하면 안내 버튼 숨김
     const buyBtn = document.getElementById('authErrorBuyBtn');
     if (buyBtn) buyBtn.classList.remove('show');
   }
@@ -4230,10 +4224,10 @@
           아래 시간 뒤에 다시 시도해주세요.
         </div>
         <div class="auth-blocked-timer" id="authBlockedTimer">약 ${formatTime(remainMs)} 남음</div>
-        <a href="https://smartstore.naver.com/sdca" target="_blank" rel="noopener"
+        <a href="https://pf.kakao.com/_ugDsX" target="_blank" rel="noopener"
            class="smartstore-btn" style="margin-top:16px;">
-          🛒 새 코드 구매하기
-          <span class="ss-sub">기다리는 동안 네이버 스마트스토어에서 구매</span>
+          💬 강사 카톡으로 문의하기
+          <span class="ss-sub">기다리는 동안 강사님께 코드 확인 요청</span>
         </a>
       </div>
     `;
@@ -4272,9 +4266,9 @@
     // 해시 계산
     const inputHash = await hashInputCode(code);
 
-    // 차단된 코드 확인 (환불 등)
+    // 차단된 코드 확인 (분실/유출 시)
     if (BLOCKED_CODE_HASHES.includes(inputHash)) {
-      showAuthError('사용이 중지된 코드입니다.\n운영자에게 문의해주세요.');
+      showAuthError('사용이 중지된 코드입니다.\n강사 카톡으로 문의해주세요.');
       input.classList.add('error');
       return;
     }
@@ -4304,7 +4298,7 @@
     if (match.expires) {
       const today = new Date().toISOString().slice(0, 10);
       if (today > match.expires) {
-        showAuthError(`만료된 코드입니다.\n(만료일: ${match.expires})\n새 코드를 구매해주세요.`);
+        showAuthError(`이용 기간이 끝났어요.\n(만료일: ${match.expires})\n강사 카톡으로 무료 갱신을 요청해주세요.`);
         input.classList.add('error');
         return;
       }
@@ -4323,7 +4317,7 @@
     localStorage.removeItem(AUTH_BLOCK_KEY);
 
     // 환영 메시지
-    const planName = { lifetime:'평생권', yearly:'1년권', event:'이벤트권' }[match.plan] || '이용권';
+    const planName = { lifetime:'운영자 모드', yearly:'1년 무료', event:'무료 증정권' }[match.plan] || '이용권';
     alert(`✅ 인증 완료!\n${planName}이 활성화되었습니다.\n\n🎉 뇌웃음365를 마음껏 즐겨보세요!`);
 
     // 인증 화면 숨기기
@@ -4335,22 +4329,22 @@
     errDiv.textContent = msg;
     errDiv.classList.add('show');
 
-    // 🛒 에러 유형에 따라 구매 버튼 노출/숨김 + 라벨 변경
+    // 💬 에러 유형에 따라 카톡 채널 버튼 노출/숨김 + 라벨 변경
     const buyBtn = document.getElementById('authErrorBuyBtn');
     const buyBtnText = document.getElementById('authErrorBuyBtnText');
     if (buyBtn && buyBtnText) {
       if (msg.includes('12자리')) {
         // 단순 입력 형식 오류 - 버튼 숨김 (오타일 가능성 높음)
         buyBtn.classList.remove('show');
-      } else if (msg.includes('만료')) {
-        buyBtnText.textContent = '🛒 새 코드 구매하기';
+      } else if (msg.includes('만료') || msg.includes('기간')) {
+        buyBtnText.textContent = '💬 강사 카톡으로 갱신 요청';
         buyBtn.classList.add('show');
       } else if (msg.includes('중지')) {
-        buyBtnText.textContent = '🛒 새 코드 구매하기';
+        buyBtnText.textContent = '💬 강사 카톡으로 문의하기';
         buyBtn.classList.add('show');
       } else {
         // 코드가 맞지 않는 경우 - 코드가 없을 가능성도 있음
-        buyBtnText.textContent = '🛒 코드 구매하기';
+        buyBtnText.textContent = '💬 강사 카톡으로 문의하기';
         buyBtn.classList.add('show');
       }
     }
@@ -4380,7 +4374,7 @@
         if (today > saved.expires) {
           localStorage.removeItem(AUTH_KEY);
           localStorage.removeItem(PK);
-          showAuthError(`이용 기간이 만료되었습니다.\n(${saved.expires})\n새 코드로 다시 인증해주세요.`);
+          showAuthError(`이용 기간이 끝났어요.\n(${saved.expires})\n강사 카톡으로 무료 갱신을 요청해주세요.`);
           return;
         }
       }
